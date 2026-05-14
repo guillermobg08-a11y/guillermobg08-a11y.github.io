@@ -857,146 +857,259 @@
 
   <!-- PROJECTS -->
   <!-- ── SOFÍA FLAGSHIP ──────────────────────────────────────── -->
-  <section id="sofia" style="padding: 6rem 0; background: linear-gradient(180deg, #06060f 0%, #0a0714 50%, #06060f 100%); position: relative; overflow: hidden;">
-    <!-- glow background -->
-    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:900px;height:600px;background:radial-gradient(ellipse,rgba(124,106,255,0.12) 0%,transparent 70%);pointer-events:none;"></div>
-    <!-- grid pattern -->
-    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(124,106,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(124,106,255,0.04) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+  <section id="sofia" style="padding: 7rem 0 5rem; background: linear-gradient(180deg, #06060f 0%, #08061a 40%, #06060f 100%); position: relative; overflow: hidden;">
+    <div style="position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:1100px;height:700px;background:radial-gradient(ellipse,rgba(124,106,255,0.1) 0%,transparent 65%);pointer-events:none;"></div>
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(124,106,255,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(124,106,255,0.035) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
 
     <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;position:relative;z-index:1;">
 
-      <!-- badge -->
-      <div class="fade-up" style="display:flex;align-items:center;gap:0.5rem;margin-bottom:2.5rem;">
-        <span style="display:inline-flex;align-items:center;gap:0.5rem;font-size:0.7rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#a78bfa;background:rgba(124,106,255,0.12);border:1px solid rgba(124,106,255,0.3);border-radius:100px;padding:0.4rem 1rem;">
-          <span style="width:6px;height:6px;border-radius:50%;background:#34d399;box-shadow:0 0 8px #34d399;flex-shrink:0;"></span>
-          Proyecto Flagship · En Producción
+      <!-- ── HEADER ── -->
+      <div class="fade-up" style="margin-bottom:3rem;">
+        <span style="display:inline-flex;align-items:center;gap:0.5rem;font-size:0.7rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#a78bfa;background:rgba(124,106,255,0.12);border:1px solid rgba(124,106,255,0.3);border-radius:100px;padding:0.4rem 1rem;margin-bottom:1.5rem;">
+          <span style="width:6px;height:6px;border-radius:50%;background:#34d399;box-shadow:0 0 8px #34d399;animation:glow-pulse 2s ease infinite;flex-shrink:0;"></span>
+          Proyecto Flagship · En Producción · 1.200+ webs analizadas
         </span>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;">
+          <div>
+            <div style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#7c6aff;margin-bottom:0.75rem;">SaaS · IA Generativa · Auditoría Web</div>
+            <h2 style="font-size:clamp(3rem,6vw,5rem);font-weight:800;letter-spacing:-0.04em;line-height:1;background:linear-gradient(135deg,#fff 0%,#c084fc 45%,#7c6aff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.75rem;">SOFÍA</h2>
+            <p style="font-size:1.2rem;color:#9090c0;line-height:1.5;max-width:440px;">Plataforma que lanza <strong style="color:#e8e8f5;">6 agentes de IA en paralelo</strong> para auditar cualquier web en menos de 60 segundos. SEO, velocidad, seguridad y accesibilidad — todo en un solo informe PDF.</p>
+          </div>
+          <!-- RIGHT mockup -->
+          <div style="display:flex;justify-content:center;">
+            <div style="width:100%;max-width:400px;background:rgba(8,8,18,0.95);border:1px solid rgba(124,106,255,0.3);border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(124,106,255,0.25);">
+              <div style="padding:0.8rem 1.1rem;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:0.4rem;">
+                <span style="width:9px;height:9px;border-radius:50%;background:#ff5f57;"></span>
+                <span style="width:9px;height:9px;border-radius:50%;background:#febc2e;"></span>
+                <span style="width:9px;height:9px;border-radius:50%;background:#28c840;"></span>
+                <span style="margin-left:0.6rem;font-size:0.7rem;color:#6868a0;font-family:'JetBrains Mono',monospace;">@AuditorWebIA_bot</span>
+                <span style="margin-left:auto;font-size:0.65rem;color:#34d399;display:flex;align-items:center;gap:0.25rem;"><span style="width:4px;height:4px;border-radius:50%;background:#34d399;"></span>Claude AI</span>
+              </div>
+              <div style="padding:1rem;display:flex;flex-direction:column;gap:0.75rem;font-family:'JetBrains Mono',monospace;">
+                <div style="display:flex;justify-content:flex-end;"><div style="background:linear-gradient(135deg,#7c6aff,#a78bfa);color:#fff;padding:0.5rem 0.9rem;border-radius:12px 12px 3px 12px;font-size:0.75rem;">/auditar miempresa.es</div></div>
+                <div style="display:flex;gap:0.4rem;"><div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#7c6aff,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:0.6rem;flex-shrink:0;">✦</div><div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);padding:0.5rem 0.8rem;border-radius:3px 12px 12px 12px;color:#9090c0;font-size:0.72rem;">Analizando <strong style="color:#a78bfa;">miempresa.es</strong>…</div></div>
+                <div style="background:rgba(124,106,255,0.08);border:1px solid rgba(124,106,255,0.2);border-radius:12px;padding:1rem;margin-left:1.8rem;">
+                  <div style="font-size:0.6rem;color:#6868a0;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem;">Puntuación global</div>
+                  <div style="display:flex;align-items:baseline;gap:0.25rem;margin-bottom:0.75rem;"><span style="font-size:2.5rem;font-weight:800;color:#a78bfa;line-height:1;">76</span><span style="font-size:0.75rem;color:#6868a0;">/100</span></div>
+                  <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:0.3rem;text-align:center;">
+                    <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:0.35rem 0.1rem;"><div style="font-size:0.85rem;font-weight:700;color:#34d399;">82</div><div style="font-size:0.5rem;color:#6868a0;">SEO</div></div>
+                    <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:0.35rem 0.1rem;"><div style="font-size:0.85rem;font-weight:700;color:#fbbf24;">71</div><div style="font-size:0.5rem;color:#6868a0;">Perf</div></div>
+                    <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:0.35rem 0.1rem;"><div style="font-size:0.85rem;font-weight:700;color:#34d399;">90</div><div style="font-size:0.5rem;color:#6868a0;">Seg</div></div>
+                    <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:0.35rem 0.1rem;"><div style="font-size:0.85rem;font-weight:700;color:#60a5fa;">68</div><div style="font-size:0.5rem;color:#6868a0;">Acc</div></div>
+                    <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:0.35rem 0.1rem;"><div style="font-size:0.85rem;font-weight:700;color:#a78bfa;">78</div><div style="font-size:0.5rem;color:#6868a0;">Est</div></div>
+                    <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:0.35rem 0.1rem;"><div style="font-size:0.85rem;font-weight:700;color:#22d3ee;">77</div><div style="font-size:0.5rem;color:#6868a0;">Tot</div></div>
+                  </div>
+                  <div style="margin-top:0.6rem;font-size:0.65rem;color:#34d399;">✓ PDF generado · 3 errores críticos detectados</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- main grid -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;" class="fade-up">
+      <!-- ── STATS ── -->
+      <div class="fade-up" style="display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-bottom:4rem;background:rgba(255,255,255,0.05);border-radius:14px;overflow:hidden;border:1px solid rgba(124,106,255,0.12);">
+        <div style="background:#06060f;padding:1.25rem;text-align:center;"><div style="font-size:1.75rem;font-weight:800;color:#a78bfa;">6</div><div style="font-size:0.7rem;color:#6868a0;margin-top:0.2rem;">Agentes IA</div></div>
+        <div style="background:#06060f;padding:1.25rem;text-align:center;"><div style="font-size:1.75rem;font-weight:800;color:#a78bfa;">&lt;60s</div><div style="font-size:0.7rem;color:#6868a0;margin-top:0.2rem;">Por informe</div></div>
+        <div style="background:#06060f;padding:1.25rem;text-align:center;"><div style="font-size:1.75rem;font-weight:800;color:#a78bfa;">1.2k+</div><div style="font-size:0.7rem;color:#6868a0;margin-top:0.2rem;">Webs analizadas</div></div>
+        <div style="background:#06060f;padding:1.25rem;text-align:center;"><div style="font-size:1.75rem;font-weight:800;color:#a78bfa;">+37</div><div style="font-size:0.7rem;color:#6868a0;margin-top:0.2rem;">Pts. mejora media</div></div>
+        <div style="background:#06060f;padding:1.25rem;text-align:center;"><div style="font-size:1.75rem;font-weight:800;color:#a78bfa;">PDF</div><div style="font-size:0.7rem;color:#6868a0;margin-top:0.2rem;">White-label</div></div>
+      </div>
 
-        <!-- LEFT: content -->
-        <div style="display:flex;flex-direction:column;gap:1.75rem;">
-          <div>
-            <div style="font-size:0.8rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#7c6aff;margin-bottom:0.6rem;">SaaS · Inteligencia Artificial · Auditoría Web</div>
-            <h2 style="font-size:clamp(2.8rem,5vw,4.2rem);font-weight:800;letter-spacing:-0.03em;line-height:1.05;background:linear-gradient(135deg,#fff 0%,#c084fc 40%,#7c6aff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.5rem;">SOFÍA</h2>
-            <p style="font-size:1.35rem;color:#9090c0;font-weight:400;line-height:1.4;">Audita tu web con IA en <strong style="color:#e8e8f5;font-weight:600;">60 segundos.</strong></p>
+      <!-- ── 6 MÓDULOS DE ANÁLISIS ── -->
+      <div class="fade-up" style="margin-bottom:4rem;">
+        <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#7c6aff;margin-bottom:0.5rem;">// análisis</div>
+        <h3 style="font-size:1.6rem;font-weight:700;color:#e8e8f5;margin-bottom:0.5rem;">6 agentes de IA analizando en paralelo</h3>
+        <p style="color:#6868a0;font-size:0.9rem;margin-bottom:2rem;">Cada agente es especialista en su área. Todos trabajan a la vez, no en secuencia.</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+          <!-- SEO -->
+          <div style="background:rgba(13,13,26,0.7);border:1px solid rgba(52,211,153,0.2);border-radius:14px;padding:1.4rem;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(52,211,153,0.5)'" onmouseout="this.style.borderColor='rgba(52,211,153,0.2)'">
+            <div style="font-size:1.5rem;margin-bottom:0.75rem;">🔍</div>
+            <div style="font-size:0.95rem;font-weight:700;color:#e8e8f5;margin-bottom:0.4rem;">SEO con IA generativa</div>
+            <div style="font-size:0.8rem;color:#6868a0;line-height:1.6;margin-bottom:0.75rem;">Claude AI interpreta los datos y genera recomendaciones en lenguaje natural, priorizadas por impacto real.</div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.3rem;">
+              <span style="font-size:0.6rem;background:rgba(52,211,153,0.1);color:#34d399;border-radius:4px;padding:0.2rem 0.5rem;">Meta tags</span>
+              <span style="font-size:0.6rem;background:rgba(52,211,153,0.1);color:#34d399;border-radius:4px;padding:0.2rem 0.5rem;">H1–H6</span>
+              <span style="font-size:0.6rem;background:rgba(52,211,153,0.1);color:#34d399;border-radius:4px;padding:0.2rem 0.5rem;">Schema.org</span>
+              <span style="font-size:0.6rem;background:rgba(52,211,153,0.1);color:#34d399;border-radius:4px;padding:0.2rem 0.5rem;">Sitemap</span>
+              <span style="font-size:0.6rem;background:rgba(52,211,153,0.1);color:#34d399;border-radius:4px;padding:0.2rem 0.5rem;">Canonicals</span>
+              <span style="font-size:0.6rem;background:rgba(52,211,153,0.1);color:#34d399;border-radius:4px;padding:0.2rem 0.5rem;">Open Graph</span>
+              <span style="font-size:0.6rem;background:rgba(52,211,153,0.1);color:#34d399;border-radius:4px;padding:0.2rem 0.5rem;">Hreflang</span>
+            </div>
           </div>
+          <!-- Core Web Vitals -->
+          <div style="background:rgba(13,13,26,0.7);border:1px solid rgba(251,191,36,0.2);border-radius:14px;padding:1.4rem;" onmouseover="this.style.borderColor='rgba(251,191,36,0.5)'" onmouseout="this.style.borderColor='rgba(251,191,36,0.2)'">
+            <div style="font-size:1.5rem;margin-bottom:0.75rem;">⚡</div>
+            <div style="font-size:0.95rem;font-weight:700;color:#e8e8f5;margin-bottom:0.4rem;">Core Web Vitals reales</div>
+            <div style="font-size:0.8rem;color:#6868a0;line-height:1.6;margin-bottom:0.75rem;">LCP, CLS, INP y TTFB medidos con la misma API que usa Google para sus rankings. +1s = −7% conversiones.</div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.3rem;">
+              <span style="font-size:0.6rem;background:rgba(251,191,36,0.1);color:#fbbf24;border-radius:4px;padding:0.2rem 0.5rem;">LCP</span>
+              <span style="font-size:0.6rem;background:rgba(251,191,36,0.1);color:#fbbf24;border-radius:4px;padding:0.2rem 0.5rem;">CLS</span>
+              <span style="font-size:0.6rem;background:rgba(251,191,36,0.1);color:#fbbf24;border-radius:4px;padding:0.2rem 0.5rem;">INP</span>
+              <span style="font-size:0.6rem;background:rgba(251,191,36,0.1);color:#fbbf24;border-radius:4px;padding:0.2rem 0.5rem;">TTFB</span>
+              <span style="font-size:0.6rem;background:rgba(251,191,36,0.1);color:#fbbf24;border-radius:4px;padding:0.2rem 0.5rem;">Móvil &amp; Desktop</span>
+            </div>
+          </div>
+          <!-- Seguridad -->
+          <div style="background:rgba(13,13,26,0.7);border:1px solid rgba(96,165,250,0.2);border-radius:14px;padding:1.4rem;" onmouseover="this.style.borderColor='rgba(96,165,250,0.5)'" onmouseout="this.style.borderColor='rgba(96,165,250,0.2)'">
+            <div style="font-size:1.5rem;margin-bottom:0.75rem;">🔒</div>
+            <div style="font-size:0.95rem;font-weight:700;color:#e8e8f5;margin-bottom:0.4rem;">Seguridad completa</div>
+            <div style="font-size:0.8rem;color:#6868a0;line-height:1.6;margin-bottom:0.75rem;">HTTPS, SSL, cabeceras de seguridad (CSP, HSTS), mixed content y detección de vulnerabilidades comunes.</div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.3rem;">
+              <span style="font-size:0.6rem;background:rgba(96,165,250,0.1);color:#60a5fa;border-radius:4px;padding:0.2rem 0.5rem;">HTTPS</span>
+              <span style="font-size:0.6rem;background:rgba(96,165,250,0.1);color:#60a5fa;border-radius:4px;padding:0.2rem 0.5rem;">SSL</span>
+              <span style="font-size:0.6rem;background:rgba(96,165,250,0.1);color:#60a5fa;border-radius:4px;padding:0.2rem 0.5rem;">CSP</span>
+              <span style="font-size:0.6rem;background:rgba(96,165,250,0.1);color:#60a5fa;border-radius:4px;padding:0.2rem 0.5rem;">HSTS</span>
+              <span style="font-size:0.6rem;background:rgba(96,165,250,0.1);color:#60a5fa;border-radius:4px;padding:0.2rem 0.5rem;">Mixed content</span>
+            </div>
+          </div>
+          <!-- Accesibilidad -->
+          <div style="background:rgba(13,13,26,0.7);border:1px solid rgba(167,139,250,0.2);border-radius:14px;padding:1.4rem;" onmouseover="this.style.borderColor='rgba(167,139,250,0.5)'" onmouseout="this.style.borderColor='rgba(167,139,250,0.2)'">
+            <div style="font-size:1.5rem;margin-bottom:0.75rem;">♿</div>
+            <div style="font-size:0.95rem;font-weight:700;color:#e8e8f5;margin-bottom:0.4rem;">Accesibilidad WCAG 2.1</div>
+            <div style="font-size:0.8rem;color:#6868a0;line-height:1.6;margin-bottom:0.75rem;">Contraste, alt texts, formularios, roles ARIA y navegación por teclado. Cumplimiento legal en España.</div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.3rem;">
+              <span style="font-size:0.6rem;background:rgba(167,139,250,0.1);color:#a78bfa;border-radius:4px;padding:0.2rem 0.5rem;">WCAG 2.1</span>
+              <span style="font-size:0.6rem;background:rgba(167,139,250,0.1);color:#a78bfa;border-radius:4px;padding:0.2rem 0.5rem;">Alt text</span>
+              <span style="font-size:0.6rem;background:rgba(167,139,250,0.1);color:#a78bfa;border-radius:4px;padding:0.2rem 0.5rem;">ARIA</span>
+              <span style="font-size:0.6rem;background:rgba(167,139,250,0.1);color:#a78bfa;border-radius:4px;padding:0.2rem 0.5rem;">Contraste</span>
+              <span style="font-size:0.6rem;background:rgba(167,139,250,0.1);color:#a78bfa;border-radius:4px;padding:0.2rem 0.5rem;">Teclado</span>
+            </div>
+          </div>
+          <!-- Monitoreo -->
+          <div style="background:rgba(13,13,26,0.7);border:1px solid rgba(34,211,238,0.2);border-radius:14px;padding:1.4rem;" onmouseover="this.style.borderColor='rgba(34,211,238,0.5)'" onmouseout="this.style.borderColor='rgba(34,211,238,0.2)'">
+            <div style="font-size:1.5rem;margin-bottom:0.75rem;">🔔</div>
+            <div style="font-size:0.95rem;font-weight:700;color:#e8e8f5;margin-bottom:0.4rem;">Monitoreo automático</div>
+            <div style="font-size:0.8rem;color:#6868a0;line-height:1.6;margin-bottom:0.75rem;">SOFÍA vigila tus webs semanalmente y envía alerta si el score baja significativamente. Histórico con tendencias.</div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.3rem;">
+              <span style="font-size:0.6rem;background:rgba(34,211,238,0.1);color:#22d3ee;border-radius:4px;padding:0.2rem 0.5rem;">Alertas</span>
+              <span style="font-size:0.6rem;background:rgba(34,211,238,0.1);color:#22d3ee;border-radius:4px;padding:0.2rem 0.5rem;">Histórico</span>
+              <span style="font-size:0.6rem;background:rgba(34,211,238,0.1);color:#22d3ee;border-radius:4px;padding:0.2rem 0.5rem;">Tendencias</span>
+              <span style="font-size:0.6rem;background:rgba(34,211,238,0.1);color:#22d3ee;border-radius:4px;padding:0.2rem 0.5rem;">Semanal</span>
+            </div>
+          </div>
+          <!-- Flujos -->
+          <div style="background:rgba(13,13,26,0.7);border:1px solid rgba(248,113,113,0.2);border-radius:14px;padding:1.4rem;" onmouseover="this.style.borderColor='rgba(248,113,113,0.5)'" onmouseout="this.style.borderColor='rgba(248,113,113,0.2)'">
+            <div style="font-size:1.5rem;margin-bottom:0.75rem;">⚙️</div>
+            <div style="font-size:0.95rem;font-weight:700;color:#e8e8f5;margin-bottom:0.4rem;">Flujos automatizados</div>
+            <div style="font-size:0.8rem;color:#6868a0;line-height:1.6;margin-bottom:0.75rem;">Plantillas multi-paso para auditoría de competidores, revisión pre-lanzamiento y seguimiento mensual.</div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.3rem;">
+              <span style="font-size:0.6rem;background:rgba(248,113,113,0.1);color:#f87171;border-radius:4px;padding:0.2rem 0.5rem;">Plantillas</span>
+              <span style="font-size:0.6rem;background:rgba(248,113,113,0.1);color:#f87171;border-radius:4px;padding:0.2rem 0.5rem;">Multi-paso</span>
+              <span style="font-size:0.6rem;background:rgba(248,113,113,0.1);color:#f87171;border-radius:4px;padding:0.2rem 0.5rem;">Competidores</span>
+              <span style="font-size:0.6rem;background:rgba(248,113,113,0.1);color:#f87171;border-radius:4px;padding:0.2rem 0.5rem;">Pre-lanzamiento</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-          <p style="font-size:1rem;color:#7878a0;line-height:1.75;max-width:460px;">Plataforma que lanza <strong style="color:#a78bfa;">6 agentes de IA en paralelo</strong> (Claude AI · Anthropic) para analizar SEO, Core Web Vitals, seguridad y accesibilidad de cualquier sitio web simultáneamente. Sin registro. Informe PDF incluido.</p>
-
-          <!-- feature list -->
-          <ul style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem 1rem;list-style:none;padding:0;margin:0;">
-            <li style="display:flex;align-items:center;gap:0.5rem;font-size:0.875rem;color:#9090c0;"><span style="color:#34d399;font-weight:700;">✓</span> SEO técnico completo</li>
-            <li style="display:flex;align-items:center;gap:0.5rem;font-size:0.875rem;color:#9090c0;"><span style="color:#34d399;font-weight:700;">✓</span> Core Web Vitals</li>
-            <li style="display:flex;align-items:center;gap:0.5rem;font-size:0.875rem;color:#9090c0;"><span style="color:#34d399;font-weight:700;">✓</span> Análisis de seguridad</li>
-            <li style="display:flex;align-items:center;gap:0.5rem;font-size:0.875rem;color:#9090c0;"><span style="color:#34d399;font-weight:700;">✓</span> Accesibilidad WCAG</li>
-            <li style="display:flex;align-items:center;gap:0.5rem;font-size:0.875rem;color:#9090c0;"><span style="color:#34d399;font-weight:700;">✓</span> Informe PDF profesional</li>
-            <li style="display:flex;align-items:center;gap:0.5rem;font-size:0.875rem;color:#9090c0;"><span style="color:#34d399;font-weight:700;">✓</span> Sin registro requerido</li>
-          </ul>
-
-          <!-- workflow -->
-          <div>
-            <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6868a0;margin-bottom:0.75rem;">Flujo de trabajo</div>
-            <div class="workflow" style="padding:0.5rem 0;">
-              <div class="wf-node wf-trigger"><div class="wf-icon">🌐</div><div class="wf-label">URL Input</div></div>
+      <!-- ── SUITE + WORKFLOW ── -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;margin-bottom:4rem;" class="fade-up">
+        <!-- Suite -->
+        <div>
+          <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#7c6aff;margin-bottom:0.5rem;">// suite completa</div>
+          <h3 style="font-size:1.3rem;font-weight:700;color:#e8e8f5;margin-bottom:1.5rem;">Todas las herramientas incluidas</h3>
+          <div style="display:flex;flex-direction:column;gap:0.75rem;">
+            <div style="display:flex;align-items:center;gap:1rem;padding:0.85rem 1rem;background:rgba(13,13,26,0.7);border:1px solid rgba(255,255,255,0.06);border-radius:10px;">
+              <span style="font-size:1.1rem;flex-shrink:0;">🔍</span>
+              <div><div style="font-size:0.85rem;font-weight:600;color:#e8e8f5;">Analizador web</div><div style="font-size:0.75rem;color:#6868a0;">Auditoría completa en 60s · Gratis · Sin registro</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:1rem;padding:0.85rem 1rem;background:rgba(13,13,26,0.7);border:1px solid rgba(255,255,255,0.06);border-radius:10px;">
+              <span style="font-size:1.1rem;flex-shrink:0;">🤖</span>
+              <div><div style="font-size:0.85rem;font-weight:600;color:#e8e8f5;">Agentes IA especializados</div><div style="font-size:0.75rem;color:#6868a0;">Chat directo con expertos en SEO, Perf, Seguridad y Accesibilidad</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:1rem;padding:0.85rem 1rem;background:rgba(13,13,26,0.7);border:1px solid rgba(255,255,255,0.06);border-radius:10px;">
+              <span style="font-size:1.1rem;flex-shrink:0;">📈</span>
+              <div><div style="font-size:0.85rem;font-weight:600;color:#e8e8f5;">Seguimiento de progreso</div><div style="font-size:0.75rem;color:#6868a0;">Evolución histórica · Mide el impacto de cada mejora</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:1rem;padding:0.85rem 1rem;background:rgba(13,13,26,0.7);border:1px solid rgba(255,255,255,0.06);border-radius:10px;">
+              <span style="font-size:1.1rem;flex-shrink:0;">🏢</span>
+              <div><div style="font-size:0.85rem;font-weight:600;color:#e8e8f5;">PDF white-label para agencias</div><div style="font-size:0.75rem;color:#6868a0;">Tu logo, colores y marca · Multi-cliente · Soporte prioritario</div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Workflow -->
+        <div>
+          <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#7c6aff;margin-bottom:0.5rem;">// flujo de trabajo</div>
+          <h3 style="font-size:1.3rem;font-weight:700;color:#e8e8f5;margin-bottom:1.5rem;">De URL a informe en 3 pasos</h3>
+          <div style="display:flex;flex-direction:column;gap:1rem;">
+            <div style="display:flex;gap:1rem;align-items:flex-start;">
+              <div style="width:32px;height:32px;border-radius:50%;background:rgba(124,106,255,0.15);border:1px solid rgba(124,106,255,0.3);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#a78bfa;flex-shrink:0;">01</div>
+              <div><div style="font-size:0.9rem;font-weight:600;color:#e8e8f5;margin-bottom:0.2rem;">Pega tu URL</div><div style="font-size:0.8rem;color:#6868a0;">Sin registro, sin contraseña, sin instalación. Solo la URL.</div></div>
+            </div>
+            <div style="display:flex;gap:1rem;align-items:flex-start;">
+              <div style="width:32px;height:32px;border-radius:50%;background:rgba(124,106,255,0.15);border:1px solid rgba(124,106,255,0.3);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#a78bfa;flex-shrink:0;">02</div>
+              <div><div style="font-size:0.9rem;font-weight:600;color:#e8e8f5;margin-bottom:0.2rem;">SOFÍA analiza con IA</div><div style="font-size:0.8rem;color:#6868a0;">6 agentes en paralelo: SEO, velocidad, seguridad, accesibilidad, estructura y competencia.</div></div>
+            </div>
+            <div style="display:flex;gap:1rem;align-items:flex-start;">
+              <div style="width:32px;height:32px;border-radius:50%;background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.3);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#34d399;flex-shrink:0;">03</div>
+              <div><div style="font-size:0.9rem;font-weight:600;color:#e8e8f5;margin-bottom:0.2rem;">Lee y comparte tu informe</div><div style="font-size:0.8rem;color:#6868a0;">Score 0–100, errores priorizados por impacto, recomendaciones de IA y PDF descargable. URL compartible incluida.</div></div>
+            </div>
+          </div>
+          <div style="margin-top:1.5rem;">
+            <div style="font-size:0.65rem;color:#6868a0;margin-bottom:0.5rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;">Diagrama de flujo</div>
+            <div class="workflow" style="padding:0.4rem 0;">
+              <div class="wf-node wf-trigger"><div class="wf-icon">🌐</div><div class="wf-label">URL</div></div>
               <div class="wf-arrow"></div>
-              <div class="wf-node wf-api"><div class="wf-icon">✦</div><div class="wf-label">6 Agentes IA</div></div>
+              <div class="wf-node wf-api"><div class="wf-icon">✦</div><div class="wf-label">6 Agentes</div></div>
               <div class="wf-arrow"></div>
               <div class="wf-node wf-process"><div class="wf-icon">🔍</div><div class="wf-label">SEO</div></div>
               <div class="wf-arrow"></div>
               <div class="wf-node wf-process"><div class="wf-icon">⚡</div><div class="wf-label">Vitals</div></div>
               <div class="wf-arrow"></div>
-              <div class="wf-node wf-process"><div class="wf-icon">🔒</div><div class="wf-label">Seguridad</div></div>
+              <div class="wf-node wf-storage"><div class="wf-icon">📊</div><div class="wf-label">Score</div></div>
               <div class="wf-arrow"></div>
-              <div class="wf-node wf-storage"><div class="wf-icon">📊</div><div class="wf-label">Score /100</div></div>
-              <div class="wf-arrow"></div>
-              <div class="wf-node wf-output"><div class="wf-icon">📄</div><div class="wf-label">PDF Report</div></div>
-            </div>
-          </div>
-
-          <!-- CTAs -->
-          <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;">
-            <a href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.5rem;background:linear-gradient(135deg,#7c6aff,#a78bfa);color:#fff;padding:0.85rem 1.75rem;border-radius:10px;font-weight:700;font-size:0.95rem;text-decoration:none;transition:opacity 0.2s,transform 0.2s;" onmouseover="this.style.opacity='0.85';this.style.transform='translateY(-2px)'" onmouseout="this.style.opacity='1';this.style.transform='translateY(0)'">Ver proyecto ↗</a>
-            <a href="https://t.me/AuditorWebIA_bot" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.5rem;border:1px solid rgba(124,106,255,0.35);color:#a78bfa;padding:0.85rem 1.75rem;border-radius:10px;font-weight:600;font-size:0.95rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='#7c6aff';this.style.background='rgba(124,106,255,0.08)'" onmouseout="this.style.borderColor='rgba(124,106,255,0.35)';this.style.background='transparent'">🤖 @AuditorWebIA_bot</a>
-          </div>
-        </div>
-
-        <!-- RIGHT: UI mockup -->
-        <div style="display:flex;justify-content:center;align-items:center;">
-          <div style="width:100%;max-width:420px;background:rgba(10,10,20,0.9);border:1px solid rgba(124,106,255,0.25);border-radius:20px;overflow:hidden;box-shadow:0 40px 100px rgba(124,106,255,0.2),0 0 0 1px rgba(255,255,255,0.04);">
-            <!-- top bar -->
-            <div style="padding:0.85rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:0.5rem;">
-              <span style="width:10px;height:10px;border-radius:50%;background:#ff5f57;"></span>
-              <span style="width:10px;height:10px;border-radius:50%;background:#febc2e;"></span>
-              <span style="width:10px;height:10px;border-radius:50%;background:#28c840;"></span>
-              <span style="margin-left:0.75rem;font-size:0.75rem;color:#6868a0;font-family:'JetBrains Mono',monospace;">@AuditorWebIA_bot</span>
-              <span style="margin-left:auto;font-size:0.7rem;color:#34d399;display:flex;align-items:center;gap:0.3rem;"><span style="width:5px;height:5px;border-radius:50%;background:#34d399;"></span>Claude AI · Anthropic</span>
-            </div>
-            <!-- chat -->
-            <div style="padding:1.25rem;display:flex;flex-direction:column;gap:0.85rem;font-family:'JetBrains Mono',monospace;font-size:0.8rem;">
-              <!-- user message -->
-              <div style="display:flex;justify-content:flex-end;">
-                <div style="background:linear-gradient(135deg,#7c6aff,#a78bfa);color:#fff;padding:0.6rem 1rem;border-radius:14px 14px 4px 14px;font-size:0.8rem;">/auditar miempresa.es</div>
-              </div>
-              <!-- bot thinking -->
-              <div style="display:flex;gap:0.5rem;align-items:flex-start;">
-                <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7c6aff,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:0.7rem;flex-shrink:0;">✦</div>
-                <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);padding:0.6rem 1rem;border-radius:4px 14px 14px 14px;color:#9090c0;font-size:0.78rem;">Analizando <strong style="color:#a78bfa;">miempresa.es</strong> — un momento...</div>
-              </div>
-              <!-- score card -->
-              <div style="background:rgba(124,106,255,0.08);border:1px solid rgba(124,106,255,0.2);border-radius:14px;padding:1.1rem;margin-left:2rem;">
-                <div style="font-size:0.65rem;color:#6868a0;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem;">Puntuación global</div>
-                <div style="display:flex;align-items:baseline;gap:0.3rem;margin-bottom:1rem;">
-                  <span style="font-size:2.8rem;font-weight:800;color:#a78bfa;line-height:1;">76</span>
-                  <span style="font-size:0.85rem;color:#6868a0;">/100 puntos</span>
-                </div>
-                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;text-align:center;">
-                  <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:0.5rem;">
-                    <div style="font-size:1.1rem;font-weight:700;color:#34d399;">82</div>
-                    <div style="font-size:0.6rem;color:#6868a0;margin-top:0.15rem;">SEO</div>
-                  </div>
-                  <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:0.5rem;">
-                    <div style="font-size:1.1rem;font-weight:700;color:#fbbf24;">71</div>
-                    <div style="font-size:0.6rem;color:#6868a0;margin-top:0.15rem;">Perf</div>
-                  </div>
-                  <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:0.5rem;">
-                    <div style="font-size:1.1rem;font-weight:700;color:#34d399;">90</div>
-                    <div style="font-size:0.6rem;color:#6868a0;margin-top:0.15rem;">Seg</div>
-                  </div>
-                  <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:0.5rem;">
-                    <div style="font-size:1.1rem;font-weight:700;color:#60a5fa;">78</div>
-                    <div style="font-size:0.6rem;color:#6868a0;margin-top:0.15rem;">Acc</div>
-                  </div>
-                </div>
-                <div style="margin-top:0.75rem;display:flex;align-items:center;gap:0.4rem;font-size:0.7rem;color:#34d399;">
-                  <span>✓</span> PDF generado · Ver informe completo ↗
-                </div>
-              </div>
+              <div class="wf-node wf-output"><div class="wf-icon">📄</div><div class="wf-label">PDF</div></div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- stats row -->
-      <div class="fade-up" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:4rem;background:rgba(255,255,255,0.06);border-radius:16px;overflow:hidden;border:1px solid rgba(124,106,255,0.15);">
-        <div style="background:#06060f;padding:1.5rem;text-align:center;">
-          <div style="font-size:2rem;font-weight:800;color:#a78bfa;letter-spacing:-0.03em;">6</div>
-          <div style="font-size:0.78rem;color:#6868a0;margin-top:0.25rem;">Agentes IA en paralelo</div>
+      <!-- ── PLANES ── -->
+      <div class="fade-up" style="margin-bottom:3rem;">
+        <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#7c6aff;margin-bottom:0.5rem;">// precios</div>
+        <h3 style="font-size:1.3rem;font-weight:700;color:#e8e8f5;margin-bottom:1.5rem;">Empieza gratis. Escala cuando lo necesites.</h3>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;">
+          <div style="background:rgba(13,13,26,0.7);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:1.25rem;">
+            <div style="font-size:0.75rem;font-weight:700;color:#6868a0;margin-bottom:0.5rem;">GRATIS</div>
+            <div style="font-size:1.8rem;font-weight:800;color:#e8e8f5;margin-bottom:0.25rem;">0€</div>
+            <div style="font-size:0.7rem;color:#6868a0;margin-bottom:1rem;">para siempre</div>
+            <ul style="display:flex;flex-direction:column;gap:0.4rem;list-style:none;padding:0;font-size:0.75rem;color:#9090c0;">
+              <li>✓ 1 auditoría completa</li><li>✓ Informe PDF</li><li>✓ 6 módulos de IA</li><li style="color:#35355a;">✗ Monitoreo</li>
+            </ul>
+          </div>
+          <div style="background:rgba(13,13,26,0.7);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:1.25rem;">
+            <div style="font-size:0.75rem;font-weight:700;color:#6868a0;margin-bottom:0.5rem;">STARTER</div>
+            <div style="font-size:1.8rem;font-weight:800;color:#e8e8f5;margin-bottom:0.25rem;">29€<span style="font-size:0.9rem;font-weight:400;color:#6868a0;">/mes</span></div>
+            <div style="font-size:0.7rem;color:#6868a0;margin-bottom:1rem;">Pymes y autónomos</div>
+            <ul style="display:flex;flex-direction:column;gap:0.4rem;list-style:none;padding:0;font-size:0.75rem;color:#9090c0;">
+              <li>✓ 20 auditorías/mes</li><li>✓ PDF branded</li><li>✓ Historial 90 días</li><li style="color:#35355a;">✗ Monitoreo auto</li>
+            </ul>
+          </div>
+          <div style="background:rgba(124,106,255,0.08);border:1px solid rgba(124,106,255,0.4);border-radius:14px;padding:1.25rem;position:relative;">
+            <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:0.6rem;font-weight:700;background:#7c6aff;color:#fff;padding:0.2rem 0.7rem;border-radius:100px;white-space:nowrap;">MÁS POPULAR</div>
+            <div style="font-size:0.75rem;font-weight:700;color:#a78bfa;margin-bottom:0.5rem;">PRO</div>
+            <div style="font-size:1.8rem;font-weight:800;color:#e8e8f5;margin-bottom:0.25rem;">69€<span style="font-size:0.9rem;font-weight:400;color:#6868a0;">/mes</span></div>
+            <div style="font-size:0.7rem;color:#6868a0;margin-bottom:1rem;">Equipos de marketing</div>
+            <ul style="display:flex;flex-direction:column;gap:0.4rem;list-style:none;padding:0;font-size:0.75rem;color:#9090c0;">
+              <li>✓ 100 auditorías/mes</li><li>✓ Monitoreo semanal</li><li>✓ Benchmark competitivo</li><li>✓ Alertas automáticas</li>
+            </ul>
+          </div>
+          <div style="background:rgba(13,13,26,0.7);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:1.25rem;">
+            <div style="font-size:0.75rem;font-weight:700;color:#6868a0;margin-bottom:0.5rem;">AGENCIA</div>
+            <div style="font-size:1.8rem;font-weight:800;color:#e8e8f5;margin-bottom:0.25rem;">149€<span style="font-size:0.9rem;font-weight:400;color:#6868a0;">/mes</span></div>
+            <div style="font-size:0.7rem;color:#6868a0;margin-bottom:1rem;">Agencias y consultoras</div>
+            <ul style="display:flex;flex-direction:column;gap:0.4rem;list-style:none;padding:0;font-size:0.75rem;color:#9090c0;">
+              <li>✓ Ilimitadas</li><li>✓ PDF white-label</li><li>✓ Multi-cliente</li><li>✓ Soporte prioritario</li>
+            </ul>
+          </div>
         </div>
-        <div style="background:#06060f;padding:1.5rem;text-align:center;">
-          <div style="font-size:2rem;font-weight:800;color:#a78bfa;letter-spacing:-0.03em;">&lt;60s</div>
-          <div style="font-size:0.78rem;color:#6868a0;margin-top:0.25rem;">Para recibir el informe</div>
-        </div>
-        <div style="background:#06060f;padding:1.5rem;text-align:center;">
-          <div style="font-size:2rem;font-weight:800;color:#a78bfa;letter-spacing:-0.03em;">4</div>
-          <div style="font-size:0.78rem;color:#6868a0;margin-top:0.25rem;">Dimensiones analizadas</div>
-        </div>
-        <div style="background:#06060f;padding:1.5rem;text-align:center;">
-          <div style="font-size:2rem;font-weight:800;color:#a78bfa;letter-spacing:-0.03em;">PDF</div>
-          <div style="font-size:0.78rem;color:#6868a0;margin-top:0.25rem;">Informe profesional incluido</div>
-        </div>
+      </div>
+
+      <!-- ── CTAs ── -->
+      <div class="fade-up" style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;justify-content:center;padding-top:1rem;">
+        <a href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.5rem;background:linear-gradient(135deg,#7c6aff,#a78bfa);color:#fff;padding:0.9rem 2rem;border-radius:10px;font-weight:700;font-size:1rem;text-decoration:none;">Ver proyecto completo ↗</a>
+        <a href="https://t.me/AuditorWebIA_bot" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.5rem;border:1px solid rgba(124,106,255,0.35);color:#a78bfa;padding:0.9rem 2rem;border-radius:10px;font-weight:600;font-size:1rem;text-decoration:none;">🤖 Probar gratis en Telegram</a>
       </div>
 
     </div>
