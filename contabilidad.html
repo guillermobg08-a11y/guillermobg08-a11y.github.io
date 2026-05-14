@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Automatizaciones de Contabilidad — Guillermo Bonito</title>
+  <meta name="description" content="8 automatizaciones de contabilidad: facturas, conciliación bancaria, IVA, nóminas y más." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #06060f;
+      --bg2: #0d0d1a;
+      --bg3: #12121f;
+      --purple: #7c6aff;
+      --purple-light: #a78bfa;
+      --amber: #f59e0b;
+      --cyan: #06b6d4;
+      --blue: #3b82f6;
+      --green: #10b981;
+      --red: #ef4444;
+      --glass: rgba(255,255,255,0.04);
+      --glass-border: rgba(255,255,255,0.08);
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-dim: #475569;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(16,185,129,0.12) 1px, transparent 0);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+      animation: bgDrift 20s ease-in-out infinite alternate;
+    }
+    @keyframes bgDrift { from { background-position: 0 0; } to { background-position: 40px 40px; } }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 15% 20%, rgba(16,185,129,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 85% 80%, rgba(6,182,212,0.05) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    nav, main, footer, section, header { position: relative; z-index: 1; }
+
+    /* NAVBAR */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      background: rgba(6,6,15,0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .nav-logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-logo .accent { color: var(--purple); }
+    .nav-links { display: flex; align-items: center; gap: 1.5rem; }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-back {
+      display: flex; align-items: center; gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-decoration: none;
+      border: 1px solid var(--glass-border);
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .nav-back:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+    /* HERO */
+    .hero {
+      padding: 9rem 2rem 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .breadcrumb {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 1.5rem;
+    }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--text); }
+    .breadcrumb .sep { color: var(--text-dim); }
+
+    .sector-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(16,185,129,0.1);
+      border: 1px solid rgba(16,185,129,0.25);
+      border-radius: 999px;
+      padding: 0.35rem 1rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 1.25rem;
+    }
+    .sector-badge::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: blink 1.4s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+    .hero-title {
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+    .hero-title .hl { color: var(--green); }
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-stats {
+      display: flex; flex-wrap: wrap; gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    .hero-stat strong {
+      display: block;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--green);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .hero-stat span { font-size: 0.82rem; color: var(--text-muted); }
+
+    /* FILTER BAR */
+    .filter-bar {
+      max-width: 1200px;
+      margin: 0 auto 2rem;
+      padding: 0 2rem;
+      display: flex; flex-wrap: wrap; gap: 0.75rem;
+    }
+    .filter-btn {
+      padding: 0.45rem 1.1rem;
+      border-radius: 999px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: rgba(16,185,129,0.12);
+      border-color: rgba(16,185,129,0.35);
+      color: var(--green);
+    }
+
+    /* PROJECTS GRID */
+    .projects-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* PROJECT CARD */
+    .pcard {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 2rem;
+      display: flex; flex-direction: column; gap: 1rem;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .pcard::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--green), var(--cyan));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .pcard:hover { transform: translateY(-4px); border-color: rgba(16,185,129,0.25); box-shadow: 0 16px 48px rgba(0,0,0,0.3); }
+    .pcard:hover::before { opacity: 1; }
+
+    .pcard-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+    .pcard-icon {
+      width: 52px; height: 52px; flex-shrink: 0;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+    }
+    .pcard-meta { flex: 1; }
+    .pcard-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      margin-bottom: 0.2rem;
+    }
+    .pcard-title { font-size: 1.1rem; font-weight: 700; color: var(--text); }
+
+    .pcard-diff {
+      padding: 0.2rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      flex-shrink: 0;
+    }
+    .diff-easy { background: rgba(16,185,129,0.15); color: var(--green); }
+    .diff-med  { background: rgba(245,158,11,0.15); color: var(--amber); }
+    .diff-hard { background: rgba(239,68,68,0.15);  color: var(--red); }
+
+    .pcard-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* WORKFLOW */
+    .wf { display: flex; flex-direction: column; gap: 0; margin: 0.5rem 0; }
+    .wf-row { display: flex; align-items: center; gap: 0.5rem; }
+    .wf-node {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .wf-icon {
+      width: 22px; height: 22px;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem;
+      flex-shrink: 0;
+    }
+    .wf-arrow {
+      font-size: 0.75rem; color: var(--text-dim);
+      display: flex; align-items: center;
+    }
+    .wf-arrow::after { content: '→'; }
+    .wf-arrow-down { width: 100%; display: flex; justify-content: center; color: var(--text-dim); font-size: 0.75rem; padding: 0.1rem 0 0.1rem 1rem; }
+
+    /* node types */
+    .wf-trigger .wf-icon { background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.25);color:#fbbf24; }
+    .wf-trigger { color: #fbbf24; background: rgba(251,191,36,0.06); border: 1px solid rgba(251,191,36,0.15); }
+    .wf-process .wf-icon { background:rgba(124,106,255,0.12);border:1px solid rgba(124,106,255,0.25);color:#7c6aff; }
+    .wf-process { color: #a78bfa; background: rgba(124,106,255,0.06); border: 1px solid rgba(124,106,255,0.15); }
+    .wf-api .wf-icon { background:rgba(6,182,212,0.12);border:1px solid rgba(6,182,212,0.25);color:#06b6d4; }
+    .wf-api { color: #06b6d4; background: rgba(6,182,212,0.06); border: 1px solid rgba(6,182,212,0.15); }
+    .wf-storage .wf-icon { background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.25);color:#3b82f6; }
+    .wf-storage { color: #3b82f6; background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.15); }
+    .wf-output .wf-icon { background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);color:#10b981; }
+    .wf-output { color: #10b981; background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.15); }
+
+    .pcard-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .tag {
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--text-muted);
+    }
+
+    .pcard-time {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .pcard-time .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: blink 1.4s ease-in-out infinite; }
+
+    .pcard-cta {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      margin-top: auto;
+      padding: 0.6rem 1.2rem;
+      border-radius: 10px;
+      border: 1px solid rgba(16,185,129,0.3);
+      background: rgba(16,185,129,0.08);
+      color: var(--green);
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      align-self: flex-start;
+    }
+    .pcard-cta:hover { background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.5); }
+
+    /* SOFIA CTA BANNER */
+    .sofia-banner {
+      max-width: 1200px;
+      margin: 0 auto 5rem;
+      padding: 0 2rem;
+    }
+    .sofia-banner-inner {
+      background: linear-gradient(135deg, rgba(124,106,255,0.12), rgba(167,139,250,0.06));
+      border: 1px solid rgba(124,106,255,0.25);
+      border-radius: 20px;
+      padding: 2.5rem;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem;
+    }
+    .sofia-banner h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .sofia-banner p { font-size: 0.9rem; color: var(--text-muted); max-width: 500px; }
+    .sofia-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.8rem 1.75rem;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #7c6aff, #a78bfa);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .sofia-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--glass-border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+    }
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    /* ANIMATIONS */
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">GB<span class="accent">.</span></a>
+    <div class="nav-links">
+      <a href="index.html#sectores">Sectores</a>
+      <a href="index.html#proyectos">Proyectos</a>
+      <a href="index.html#contacto">Contacto</a>
+    </div>
+    <a href="index.html#sectores" class="nav-back">← Volver a sectores</a>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="breadcrumb fade-up">
+      <a href="index.html">Inicio</a>
+      <span class="sep">/</span>
+      <a href="index.html#sectores">Sectores</a>
+      <span class="sep">/</span>
+      <span>Contabilidad</span>
+    </div>
+
+    <div class="sector-badge fade-up">Contabilidad &amp; Finanzas</div>
+
+    <h1 class="hero-title fade-up">
+      Automatiza tu<br><span class="hl">contabilidad</span><br>al 100%
+    </h1>
+    <p class="hero-subtitle fade-up">
+      8 automatizaciones listas para eliminar el trabajo manual en facturación, conciliación bancaria, declaraciones fiscales y reporting financiero.
+    </p>
+
+    <div class="hero-stats fade-up">
+      <div class="hero-stat"><strong>8</strong><span>automatizaciones</span></div>
+      <div class="hero-stat"><strong>~85%</strong><span>menos trabajo manual</span></div>
+      <div class="hero-stat"><strong>0€</strong><span>herramientas de pago obligatorias</span></div>
+      <div class="hero-stat"><strong>Python</strong><span>+ APIs fiscales</span></div>
+    </div>
+  </header>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar fade-up">
+    <button class="filter-btn active" data-filter="all">Todas</button>
+    <button class="filter-btn" data-filter="facturas">Facturas</button>
+    <button class="filter-btn" data-filter="banco">Banca</button>
+    <button class="filter-btn" data-filter="fiscal">Fiscal / IVA</button>
+    <button class="filter-btn" data-filter="reporting">Reporting</button>
+    <button class="filter-btn" data-filter="nominas">Nóminas</button>
+  </div>
+
+  <!-- PROJECTS GRID -->
+  <div class="projects-grid">
+
+    <!-- 01 GENERADOR DE FACTURAS -->
+    <div class="pcard fade-up" data-tags="facturas">
+      <div class="pcard-header">
+        <div class="pcard-icon" style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);">🧾</div>
+        <div class="pcard-meta">
+          <div class="pcard-num">// 01</div>
+          <div class="pcard-title">Generador automático de facturas</div>
+        </div>
+        <span class="pcard-diff diff-easy">FÁCIL</span>
+      </div>
+      <p class="pcard-desc">
+        Lee pedidos desde Google Sheets o una base de datos, genera facturas en PDF con tu logo y datos fiscales, y las envía por email al cliente automáticamente. Numeración correlativa, IVA aplicado y registro en libro de facturas.
+      </p>
+      <div class="wf">
+        <div class="wf-row">
+          <div class="wf-node wf-trigger"><div class="wf-icon">⏰</div>Nuevo pedido</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">⚙️</div>Generar PDF</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-output"><div class="wf-icon">📧</div>Enviar email</div>
+        </div>
+        <div class="wf-arrow-down">↓</div>
+        <div class="wf-row">
+          <div class="wf-node wf-storage"><div class="wf-icon">📋</div>Registrar en libro</div>
+        </div>
+      </div>
+      <div class="pcard-tags">
+        <span class="tag">Python</span><span class="tag">ReportLab</span><span class="tag">smtplib</span><span class="tag">Google Sheets API</span>
+      </div>
+      <div class="pcard-time"><div class="dot"></div>Implementación: 1–2 días</div>
+      <a href="https://github.com/guillermobg08-a11y" target="_blank" class="pcard-cta">Ver código →</a>
+    </div>
+
+    <!-- 02 CONCILIACIÓN BANCARIA -->
+    <div class="pcard fade-up" data-tags="banco">
+      <div class="pcard-header">
+        <div class="pcard-icon" style="background:rgba(6,182,212,0.12);border:1px solid rgba(6,182,212,0.25);">🏦</div>
+        <div class="pcard-meta">
+          <div class="pcard-num">// 02</div>
+          <div class="pcard-title">Conciliación bancaria automática</div>
+        </div>
+        <span class="pcard-diff diff-med">MEDIO</span>
+      </div>
+      <p class="pcard-desc">
+        Descarga los movimientos bancarios del extracto (CSV/OFX), los cruza contra facturas emitidas y recibidas, detecta discrepancias y genera un informe de conciliación mensual en Excel. Sin abrir el banco manualmente.
+      </p>
+      <div class="wf">
+        <div class="wf-row">
+          <div class="wf-node wf-trigger"><div class="wf-icon">📥</div>Extracto bancario</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">🔍</div>Cruzar datos</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">⚠️</div>Detectar diff.</div>
+        </div>
+        <div class="wf-arrow-down">↓</div>
+        <div class="wf-row">
+          <div class="wf-node wf-output"><div class="wf-icon">📊</div>Informe Excel</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-output"><div class="wf-icon">🔔</div>Alerta Telegram</div>
+        </div>
+      </div>
+      <div class="pcard-tags">
+        <span class="tag">Python</span><span class="tag">pandas</span><span class="tag">openpyxl</span><span class="tag">OFX parser</span>
+      </div>
+      <div class="pcard-time"><div class="dot"></div>Implementación: 2–4 días</div>
+      <a href="https://github.com/guillermobg08-a11y" target="_blank" class="pcard-cta">Ver código →</a>
+    </div>
+
+    <!-- 03 ALERTA VENCIMIENTOS FISCALES -->
+    <div class="pcard fade-up" data-tags="fiscal">
+      <div class="pcard-header">
+        <div class="pcard-icon" style="background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.25);">📅</div>
+        <div class="pcard-meta">
+          <div class="pcard-num">// 03</div>
+          <div class="pcard-title">Alertas de vencimientos fiscales</div>
+        </div>
+        <span class="pcard-diff diff-easy">FÁCIL</span>
+      </div>
+      <p class="pcard-desc">
+        Calendario fiscal automatizado: IVA trimestral (mod. 303), IRPF fraccionado (mod. 130), IS, declaraciones informativas. Envía recordatorios por Telegram y email con 15, 7 y 1 día de antelación.
+      </p>
+      <div class="wf">
+        <div class="wf-row">
+          <div class="wf-node wf-trigger"><div class="wf-icon">📆</div>Cron diario</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">🗓️</div>Comprobar vencim.</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-output"><div class="wf-icon">📱</div>Aviso Telegram</div>
+        </div>
+      </div>
+      <div class="pcard-tags">
+        <span class="tag">Python</span><span class="tag">schedule</span><span class="tag">python-telegram-bot</span><span class="tag">AEAT calendario</span>
+      </div>
+      <div class="pcard-time"><div class="dot"></div>Implementación: 1 día</div>
+      <a href="https://github.com/guillermobg08-a11y" target="_blank" class="pcard-cta">Ver código →</a>
+    </div>
+
+    <!-- 04 CÁLCULO IVA TRIMESTRAL -->
+    <div class="pcard fade-up" data-tags="fiscal">
+      <div class="pcard-header">
+        <div class="pcard-icon" style="background:rgba(124,106,255,0.12);border:1px solid rgba(124,106,255,0.25);">🧮</div>
+        <div class="pcard-meta">
+          <div class="pcard-num">// 04</div>
+          <div class="pcard-title">Cálculo automático de IVA trimestral</div>
+        </div>
+        <span class="pcard-diff diff-med">MEDIO</span>
+      </div>
+      <p class="pcard-desc">
+        Consolida facturas emitidas y recibidas del trimestre, aplica tipos de IVA (21%, 10%, 4%, exento), calcula el IVA a ingresar/devolver, genera el borrador del modelo 303 y lo exporta en PDF listo para revisar.
+      </p>
+      <div class="wf">
+        <div class="wf-row">
+          <div class="wf-node wf-trigger"><div class="wf-icon">📥</div>Facturas trim.</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">🧮</div>Calcular IVA</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">📋</div>Modelo 303</div>
+        </div>
+        <div class="wf-arrow-down">↓</div>
+        <div class="wf-row">
+          <div class="wf-node wf-output"><div class="wf-icon">📄</div>PDF borrador</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-output"><div class="wf-icon">📧</div>Email gestor</div>
+        </div>
+      </div>
+      <div class="pcard-tags">
+        <span class="tag">Python</span><span class="tag">pandas</span><span class="tag">ReportLab</span><span class="tag">Google Sheets</span>
+      </div>
+      <div class="pcard-time"><div class="dot"></div>Implementación: 2–3 días</div>
+      <a href="https://github.com/guillermobg08-a11y" target="_blank" class="pcard-cta">Ver código →</a>
+    </div>
+
+    <!-- 05 INFORME P&L MENSUAL -->
+    <div class="pcard fade-up" data-tags="reporting">
+      <div class="pcard-header">
+        <div class="pcard-icon" style="background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.25);">📈</div>
+        <div class="pcard-meta">
+          <div class="pcard-num">// 05</div>
+          <div class="pcard-title">Informe P&amp;L mensual automatizado</div>
+        </div>
+        <span class="pcard-diff diff-med">MEDIO</span>
+      </div>
+      <p class="pcard-desc">
+        Cada mes genera automáticamente el informe de Pérdidas y Ganancias: ingresos por categoría, gastos desglosados, margen bruto/neto, comparativa con mes anterior y gráficos de tendencia. Entregado en PDF y Google Sheets.
+      </p>
+      <div class="wf">
+        <div class="wf-row">
+          <div class="wf-node wf-trigger"><div class="wf-icon">📅</div>Fin de mes</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">📊</div>Agregar datos</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">📉</div>Calcular P&amp;L</div>
+        </div>
+        <div class="wf-arrow-down">↓</div>
+        <div class="wf-row">
+          <div class="wf-node wf-output"><div class="wf-icon">📄</div>PDF + Sheets</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-output"><div class="wf-icon">📧</div>Email dirección</div>
+        </div>
+      </div>
+      <div class="pcard-tags">
+        <span class="tag">Python</span><span class="tag">matplotlib</span><span class="tag">openpyxl</span><span class="tag">Google Sheets API</span>
+      </div>
+      <div class="pcard-time"><div class="dot"></div>Implementación: 3–5 días</div>
+      <a href="https://github.com/guillermobg08-a11y" target="_blank" class="pcard-cta">Ver código →</a>
+    </div>
+
+    <!-- 06 CONTROL DE GASTOS CON IA -->
+    <div class="pcard fade-up" data-tags="reporting banco">
+      <div class="pcard-header">
+        <div class="pcard-icon" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);">🤖</div>
+        <div class="pcard-meta">
+          <div class="pcard-num">// 06</div>
+          <div class="pcard-title">Categorización de gastos con IA</div>
+        </div>
+        <span class="pcard-diff diff-hard">AVANZADO</span>
+      </div>
+      <p class="pcard-desc">
+        Importa los movimientos bancarios y usa Claude AI para clasificar automáticamente cada gasto en categorías contables (suministros, material, marketing, viajes, etc.). Aprende de correcciones manuales. Exporta a A3 / Contasol.
+      </p>
+      <div class="wf">
+        <div class="wf-row">
+          <div class="wf-node wf-trigger"><div class="wf-icon">🏦</div>Movimientos banco</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-api"><div class="wf-icon">🤖</div>Claude AI</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">🏷️</div>Categorizar</div>
+        </div>
+        <div class="wf-arrow-down">↓</div>
+        <div class="wf-row">
+          <div class="wf-node wf-storage"><div class="wf-icon">📊</div>Exportar A3/Contasol</div>
+        </div>
+      </div>
+      <div class="pcard-tags">
+        <span class="tag">Python</span><span class="tag">Claude API</span><span class="tag">pandas</span><span class="tag">A3 CSV</span>
+      </div>
+      <div class="pcard-time"><div class="dot"></div>Implementación: 4–6 días</div>
+      <a href="https://github.com/guillermobg08-a11y" target="_blank" class="pcard-cta">Ver código →</a>
+    </div>
+
+    <!-- 07 DETECCIÓN DE DUPLICADOS -->
+    <div class="pcard fade-up" data-tags="facturas banco">
+      <div class="pcard-header">
+        <div class="pcard-icon" style="background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.25);">🔎</div>
+        <div class="pcard-meta">
+          <div class="pcard-num">// 07</div>
+          <div class="pcard-title">Detector de facturas duplicadas</div>
+        </div>
+        <span class="pcard-diff diff-easy">FÁCIL</span>
+      </div>
+      <p class="pcard-desc">
+        Escanea el directorio de facturas recibidas y detecta duplicados por importe, proveedor y fecha (con margen de ±3 días). Alerta inmediata vía Telegram antes de que se paguen dos veces. Ahorra dinero real.
+      </p>
+      <div class="wf">
+        <div class="wf-row">
+          <div class="wf-node wf-trigger"><div class="wf-icon">📥</div>Nueva factura</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">🔍</div>Buscar similares</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-output"><div class="wf-icon">⚠️</div>Alerta duplicado</div>
+        </div>
+      </div>
+      <div class="pcard-tags">
+        <span class="tag">Python</span><span class="tag">pdfplumber</span><span class="tag">fuzzy matching</span><span class="tag">Telegram</span>
+      </div>
+      <div class="pcard-time"><div class="dot"></div>Implementación: 1–2 días</div>
+      <a href="https://github.com/guillermobg08-a11y" target="_blank" class="pcard-cta">Ver código →</a>
+    </div>
+
+    <!-- 08 NÓMINAS AUTOMÁTICAS -->
+    <div class="pcard fade-up" data-tags="nominas">
+      <div class="pcard-header">
+        <div class="pcard-icon" style="background:rgba(167,139,250,0.12);border:1px solid rgba(167,139,250,0.25);">👷</div>
+        <div class="pcard-meta">
+          <div class="pcard-num">// 08</div>
+          <div class="pcard-title">Generador de nóminas automático</div>
+        </div>
+        <span class="pcard-diff diff-hard">AVANZADO</span>
+      </div>
+      <p class="pcard-desc">
+        Lee el cuadro de empleados (horas, categoría, antigüedad, complementos), calcula IRPF, Seguridad Social y retenciones, genera el PDF de nómina y envía la nómina por email al empleado. Compatible con el formato A3Nom.
+      </p>
+      <div class="wf">
+        <div class="wf-row">
+          <div class="wf-node wf-trigger"><div class="wf-icon">📅</div>Fin de mes</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">🧮</div>Calcular nómina</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">📄</div>Generar PDF</div>
+        </div>
+        <div class="wf-arrow-down">↓</div>
+        <div class="wf-row">
+          <div class="wf-node wf-output"><div class="wf-icon">📧</div>Email empleado</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-storage"><div class="wf-icon">💾</div>Archivar + A3Nom</div>
+        </div>
+      </div>
+      <div class="pcard-tags">
+        <span class="tag">Python</span><span class="tag">ReportLab</span><span class="tag">pandas</span><span class="tag">IRPF tablas</span>
+      </div>
+      <div class="pcard-time"><div class="dot"></div>Implementación: 5–7 días</div>
+      <a href="https://github.com/guillermobg08-a11y" target="_blank" class="pcard-cta">Ver código →</a>
+    </div>
+
+  </div>
+
+  <!-- SOFIA BANNER -->
+  <div class="sofia-banner">
+    <div class="sofia-banner-inner fade-up">
+      <div>
+        <h3>¿Necesitas auditar la web de tu empresa también?</h3>
+        <p>SOFÍA analiza SEO, velocidad, seguridad y accesibilidad en menos de 60 segundos con 6 agentes de IA en paralelo.</p>
+      </div>
+      <a href="index.html#sofia" class="sofia-btn">🤖 Conocer SOFÍA →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Guillermo Bonito Guerrero · <a href="index.html">Volver al portfolio</a> · <a href="https://github.com/guillermobg08-a11y" target="_blank">GitHub</a></p>
+  </footer>
+
+  <script>
+    // Fade-in on scroll
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+    // Filter buttons
+    const btns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.pcard[data-tags]');
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        cards.forEach(c => {
+          const tags = c.dataset.tags || '';
+          c.style.display = (f === 'all' || tags.includes(f)) ? '' : 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>
