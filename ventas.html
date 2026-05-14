@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Automatizaciones de Ventas & CRM — Guillermo Bonito</title>
+  <meta name="description" content="9 automatizaciones de ventas: flujos CRM, captación de leads, seguimiento automático, propuestas y reporting comercial." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #06060f;
+      --bg2: #0d0d1a;
+      --purple: #7c6aff;
+      --purple-light: #a78bfa;
+      --amber: #f59e0b;
+      --amber-dark: #d97706;
+      --cyan: #06b6d4;
+      --blue: #3b82f6;
+      --green: #10b981;
+      --red: #ef4444;
+      --orange: #f97316;
+      --glass: rgba(255,255,255,0.04);
+      --glass-border: rgba(255,255,255,0.08);
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-dim: #475569;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(245,158,11,0.1) 1px, transparent 0);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+      animation: bgDrift 20s ease-in-out infinite alternate;
+    }
+    @keyframes bgDrift { from { background-position: 0 0; } to { background-position: 40px 40px; } }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 15% 20%, rgba(245,158,11,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 85% 80%, rgba(234,88,12,0.05) 0%, transparent 60%);
+      pointer-events: none; z-index: 0;
+    }
+
+    nav, main, footer, section, header { position: relative; z-index: 1; }
+
+    /* NAV */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 64px;
+      background: rgba(6,6,15,0.7);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .nav-logo { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 1.25rem; color: var(--text); text-decoration: none; }
+    .nav-logo .accent { color: var(--purple); }
+    .nav-links { display: flex; align-items: center; gap: 1.5rem; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-back {
+      display: flex; align-items: center; gap: 0.5rem;
+      color: var(--text-muted); font-size: 0.85rem; text-decoration: none;
+      border: 1px solid var(--glass-border); padding: 0.4rem 1rem; border-radius: 8px; transition: all 0.2s;
+    }
+    .nav-back:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+    /* HERO */
+    .hero { padding: 9rem 2rem 4rem; max-width: 1200px; margin: 0 auto; }
+
+    .breadcrumb {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.82rem; color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace; margin-bottom: 1.5rem;
+    }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--text); }
+
+    .sector-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.28);
+      border-radius: 999px; padding: 0.35rem 1rem;
+      font-size: 0.78rem; font-weight: 600; color: var(--amber);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1.25rem;
+    }
+    .sector-badge::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--amber); animation: blink 1.4s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+    .hero-title {
+      font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800;
+      line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 1rem;
+    }
+    .hero-title .hl {
+      background: linear-gradient(135deg, #f59e0b, #f97316);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-subtitle { font-size: 1.1rem; color: var(--text-muted); max-width: 620px; margin-bottom: 2.5rem; }
+
+    .hero-stats { display: flex; flex-wrap: wrap; gap: 2rem; margin-bottom: 3rem; }
+    .hero-stat strong { display: block; font-size: 1.8rem; font-weight: 800; color: var(--amber); font-family: 'JetBrains Mono', monospace; }
+    .hero-stat span { font-size: 0.82rem; color: var(--text-muted); }
+
+    /* PIPELINE VISUAL */
+    .pipeline {
+      max-width: 1200px; margin: 0 auto 3rem; padding: 0 2rem;
+    }
+    .pipeline-inner {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: 20px; padding: 2rem 2.5rem;
+      overflow-x: auto;
+    }
+    .pipeline-label { font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.25rem; }
+    .pipeline-stages {
+      display: flex; align-items: center; gap: 0;
+      min-width: 700px;
+    }
+    .pipeline-stage {
+      flex: 1; text-align: center; position: relative;
+    }
+    .pipeline-stage-box {
+      padding: 0.75rem 0.5rem;
+      border-radius: 12px;
+      border: 1px solid;
+      font-size: 0.78rem; font-weight: 600;
+      display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+    }
+    .pipeline-stage-box .emoji { font-size: 1.3rem; }
+    .pipeline-connector {
+      position: absolute; top: 50%; right: -18px;
+      transform: translateY(-50%);
+      font-size: 1.1rem; color: var(--text-dim); z-index: 2;
+    }
+    .ps-lead    { background:rgba(124,106,255,0.08); border-color:rgba(124,106,255,0.3); color:#a78bfa; }
+    .ps-qualify { background:rgba(6,182,212,0.08);  border-color:rgba(6,182,212,0.3);   color:#06b6d4; }
+    .ps-propose { background:rgba(245,158,11,0.08); border-color:rgba(245,158,11,0.3);   color:#f59e0b; }
+    .ps-follow  { background:rgba(249,115,22,0.08); border-color:rgba(249,115,22,0.3);   color:#f97316; }
+    .ps-close   { background:rgba(16,185,129,0.08); border-color:rgba(16,185,129,0.3);   color:#10b981; }
+    .ps-retain  { background:rgba(59,130,246,0.08); border-color:rgba(59,130,246,0.3);   color:#3b82f6; }
+
+    /* FILTER */
+    .filter-bar { max-width: 1200px; margin: 0 auto 2rem; padding: 0 2rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .filter-btn {
+      padding: 0.45rem 1.1rem; border-radius: 999px;
+      border: 1px solid var(--glass-border); background: var(--glass);
+      color: var(--text-muted); font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: all 0.2s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.35); color: var(--amber);
+    }
+
+    /* GRID */
+    .projects-grid { max-width: 1200px; margin: 0 auto; padding: 0 2rem 6rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem; }
+
+    /* CARD */
+    .pcard {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: 20px; padding: 2rem;
+      display: flex; flex-direction: column; gap: 1rem;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+      position: relative; overflow: hidden;
+    }
+    .pcard::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, #f59e0b, #f97316); opacity: 0; transition: opacity 0.3s;
+    }
+    .pcard:hover { transform: translateY(-4px); border-color: rgba(245,158,11,0.25); box-shadow: 0 16px 48px rgba(0,0,0,0.3); }
+    .pcard:hover::before { opacity: 1; }
+
+    .pcard-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+    .pcard-icon { width: 52px; height: 52px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+    .pcard-meta { flex: 1; }
+    .pcard-num { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-dim); margin-bottom: 0.2rem; }
+    .pcard-title { font-size: 1.05rem; font-weight: 700; color: var(--text); }
+    .pcard-diff { padding: 0.2rem 0.65rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; flex-shrink: 0; }
+    .diff-easy { background: rgba(16,185,129,0.15); color: var(--green); }
+    .diff-med  { background: rgba(245,158,11,0.15); color: var(--amber); }
+    .diff-hard { background: rgba(239,68,68,0.15);  color: var(--red); }
+
+    .pcard-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* WORKFLOW */
+    .wf { display: flex; flex-direction: column; gap: 0; margin: 0.5rem 0; }
+    .wf-row { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+    .wf-node { display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.75rem; border-radius: 8px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+    .wf-icon { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; flex-shrink: 0; }
+    .wf-arrow { font-size: 0.75rem; color: var(--text-dim); display: flex; align-items: center; }
+    .wf-arrow::after { content: '→'; }
+    .wf-arrow-down { width: 100%; display: flex; justify-content: center; color: var(--text-dim); font-size: 0.75rem; padding: 0.15rem 0 0.15rem 1rem; }
+
+    .wf-trigger .wf-icon { background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.25);color:#fbbf24; }
+    .wf-trigger { color:#fbbf24; background:rgba(251,191,36,0.06); border:1px solid rgba(251,191,36,0.15); }
+    .wf-process .wf-icon { background:rgba(124,106,255,0.12);border:1px solid rgba(124,106,255,0.25);color:#7c6aff; }
+    .wf-process { color:#a78bfa; background:rgba(124,106,255,0.06); border:1px solid rgba(124,106,255,0.15); }
+    .wf-api .wf-icon { background:rgba(6,182,212,0.12);border:1px solid rgba(6,182,212,0.25);color:#06b6d4; }
+    .wf-api { color:#06b6d4; background:rgba(6,182,212,0.06); border:1px solid rgba(6,182,212,0.15); }
+    .wf-storage .wf-icon { background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.25);color:#3b82f6; }
+    .wf-storage { color:#3b82f6; background:rgba(59,130,246,0.06); border:1px solid rgba(59,130,246,0.15); }
+    .wf-output .wf-icon { background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);color:#10b981; }
+    .wf-output { color:#10b981; background:rgba(16,185,129,0.06); border:1px solid rgba(16,185,129,0.15); }
+    .wf-crm .wf-icon { background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.25);color:#f59e0b; }
+    .wf-crm { color:#f59e0b; background:rgba(245,158,11,0.06); border:1px solid rgba(245,158,11,0.15); }
+
+    .pcard-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .tag { padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.72rem; font-weight: 500; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: var(--text-muted); }
+    .pcard-time { display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
+    .pcard-time .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); animation: blink 1.4s ease-in-out infinite; }
+
+    .pcard-cta {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      margin-top: auto; padding: 0.6rem 1.2rem; border-radius: 10px;
+      border: 1px solid rgba(245,158,11,0.3); background: rgba(245,158,11,0.08);
+      color: var(--amber); font-size: 0.82rem; font-weight: 600;
+      text-decoration: none; transition: all 0.2s; align-self: flex-start;
+    }
+    .pcard-cta:hover { background: rgba(245,158,11,0.16); border-color: rgba(245,158,11,0.5); }
+
+    /* CRM BADGE */
+    .crm-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.15rem 0.6rem; border-radius: 6px; font-size: 0.7rem; font-weight: 600;
+      background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); color: var(--amber);
+    }
+
+    /* SOFIA BANNER */
+    .sofia-banner { max-width: 1200px; margin: 0 auto 5rem; padding: 0 2rem; }
+    .sofia-banner-inner {
+      background: linear-gradient(135deg, rgba(124,106,255,0.12), rgba(167,139,250,0.06));
+      border: 1px solid rgba(124,106,255,0.25); border-radius: 20px; padding: 2.5rem;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem;
+    }
+    .sofia-banner h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .sofia-banner p { font-size: 0.9rem; color: var(--text-muted); max-width: 500px; }
+    .sofia-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.8rem 1.75rem; border-radius: 12px;
+      background: linear-gradient(135deg, #7c6aff, #a78bfa); color: #fff;
+      font-weight: 700; font-size: 0.9rem; text-decoration: none; white-space: nowrap; transition: opacity 0.2s, transform 0.2s;
+    }
+    .sofia-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    footer { border-top: 1px solid var(--glass-border); padding: 2rem; text-align: center; font-size: 0.82rem; color: var(--text-dim); }
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">GB<span class="accent">.</span></a>
+    <div class="nav-links">
+      <a href="index.html#sectores">Sectores</a>
+      <a href="index.html#proyectos">Proyectos</a>
+      <a href="index.html#contacto">Contacto</a>
+    </div>
+    <a href="index.html#sectores" class="nav-back">← Volver a sectores</a>
+  </nav>
+
+  <header class="hero">
+    <div class="breadcrumb fade-up">
+      <a href="index.html">Inicio</a>
+      <span>/</span>
+      <a href="index.html#sectores">Sectores</a>
+      <span>/</span>
+      <span>Ventas &amp; CRM</span>
+    </div>
+
+    <div class="sector-badge fade-up">🚀 Ventas &amp; CRM · Área principal</div>
+
+    <h1 class="hero-title fade-up">
+      Automatiza tu<br><span class="hl">proceso de ventas</span><br>de principio a fin
+    </h1>
+    <p class="hero-subtitle fade-up">
+      Desde la captación del primer lead hasta el cierre y la retención. Flujos, CRMs, propuestas automáticas y seguimientos sin intervención manual — para que el equipo de ventas se centre en vender, no en administrar.
+    </p>
+
+    <div class="hero-stats fade-up">
+      <div class="hero-stat"><strong>9</strong><span>automatizaciones</span></div>
+      <div class="hero-stat"><strong>+40%</strong><span>tasa de seguimiento</span></div>
+      <div class="hero-stat"><strong>−70%</strong><span>tiempo admin</span></div>
+      <div class="hero-stat"><strong>n8n + Python</strong><span>stack principal</span></div>
+    </div>
+  </header>
+
+  <!-- PIPELINE VISUAL -->
+  <div class="pipeline fade-up">
+    <div class="pipeline-inner">
+      <div class="pipeline-label">// pipeline comercial cubierto</div>
+      <div class="pipeline-stages">
+        <div class="pipeline-stage">
+          <div class="pipeline-stage-box ps-lead"><span class="emoji">🎯</span>Captación<br><small style="font-weight:400;opacity:0.7">Lead</small></div>
+          <div class="pipeline-connector">›</div>
+        </div>
+        <div class="pipeline-stage">
+          <div class="pipeline-stage-box ps-qualify"><span class="emoji">🔍</span>Calificación<br><small style="font-weight:400;opacity:0.7">Qualify</small></div>
+          <div class="pipeline-connector">›</div>
+        </div>
+        <div class="pipeline-stage">
+          <div class="pipeline-stage-box ps-propose"><span class="emoji">📄</span>Propuesta<br><small style="font-weight:400;opacity:0.7">Propose</small></div>
+          <div class="pipeline-connector">›</div>
+        </div>
+        <div class="pipeline-stage">
+          <div class="pipeline-stage-box ps-follow"><span class="emoji">🔔</span>Seguimiento<br><small style="font-weight:400;opacity:0.7">Follow-up</small></div>
+          <div class="pipeline-connector">›</div>
+        </div>
+        <div class="pipeline-stage">
+          <div class="pipeline-stage-box ps-close"><span class="emoji">✅</span>Cierre<br><small style="font-weight:400;opacity:0.7">Close</small></div>
+          <div class="pipeline-connector">›</div>
+        </div>
+        <div class="pipeline-stage">
+          <div class="pipeline-stage-box ps-retain"><span class="emoji">💎</span>Retención<br><small style="font-weight:400;opacity:0.7">Retain</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILTER -->
+  <div class="filter-bar fade-up">
+    <button class="filter-btn active" data-filter="all">Todas</button>
+    <button class="filter-btn" data-filter="leads">Captación</button>
+    <button class="filter-btn" data-filter="crm">CRM</button>
+    <button class="filter-btn" data-filter="seguimiento">Seguimiento</button>
+    <button class="filter-btn" data-filter="propuestas">Propuestas</button>
+    <button class="filter-btn" data-filter="reporting">Reporting</button>
+  </div>
+
+  <div class="projects-grid">
+
+    <!-- 01 SCRAPER DE LEADS -->
+    <div class="pcard fade-up" data-tags="leads">
+      <div class="pcard-header">
+        <div class="pcard-icon" style="background:rgba(124,106,255,0.12);border:1px solid rgba(124,106,255,0.25);">🎯</div>
+        <div class="pcard-meta">
+          <div class="pcard-num">// 01</div>
+          <div class="pcard-title">Scraper de leads por nicho</div>
+        </div>
+        <span class="pcard-diff diff-med">MEDIO</span>
+      </div>
+      <p class="pcard-desc">
+        Extrae automáticamente leads de Google Maps, LinkedIn y directorios sectoriales filtrados por localidad, sector y tamaño. Entrega nombre, teléfono, email, web y redes sociales directamente en una hoja de cálculo o CRM.
+      </p>
+      <div class="wf">
+        <div class="wf-row">
+          <div class="wf-node wf-trigger"><div class="wf-icon">⚙️</div>Parámetros nicho</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-api"><div class="wf-icon">🗺️</div>Google Maps API</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">🔍</div>Scraping web</div>
+        </div>
+        <div class="wf-arrow-down">↓</div>
+        <div class="wf-row">
+          <div class="wf-node wf-storage"><div class="wf-icon">📋</div>Google Sheets / CRM</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-output"><div class="wf-icon">🔔</div>Alerta nuevos leads</div>
+        </div>
+      </div>
+      <div class="pcard-tags">
+        <span class="tag">Python</span><span class="tag">Playwright</span><span class="tag">Google Maps API</span><span class="tag">n8n</span>
+      </div>
+      <div class="pcard-time"><div class="dot"></div>Implementación: 2–4 días</div>
+      <a href="https://github.com/guillermobg08-a11y" target="_blank" class="pcard-cta">Ver código →</a>
+    </div>
+
+    <!-- 02 CALIFICACIÓN AUTOMÁTICA DE LEADS -->
+    <div class="pcard fade-up" data-tags="leads crm">
+      <div class="pcard-header">
+        <div class="pcard-icon" style="background:rgba(6,182,212,0.12);border:1px solid rgba(6,182,212,0.25);">🔍</div>
+        <div class="pcard-meta">
+          <div class="pcard-num">// 02</div>
+          <div class="pcard-title">Calificación de leads con IA</div>
+        </div>
+        <span class="pcard-diff diff-hard">AVANZADO</span>
+      </div>
+      <p class="pcard-desc">
+        Cuando entra un nuevo lead (formulario web, LinkedIn, Telegram), Claude AI analiza su perfil, web y sector, le asigna una puntuación de 0–100 y lo clasifica como frío/templado/caliente. Los calientes se asignan automáticamente al comercial disponible en el CRM.
+      </p>
+      <div class="wf">
+        <div class="wf-row">
+          <div class="wf-node wf-trigger"><div class="wf-icon">📥</div>Nuevo lead</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-api"><div class="wf-icon">🤖</div>Claude AI</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">🏷️</div>Score 0–100</div>
+        </div>
+        <div class="wf-arrow-down">↓</div>
+        <div class="wf-row">
+          <div class="wf-node wf-crm"><div class="wf-icon">🟠</div>HubSpot / Pipedrive</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-output"><div class="wf-icon">👤</div>Asignar comercial</div>
+        </div>
+      </div>
+      <div class="pcard-tags">
+        <span class="tag">Python</span><span class="tag">Claude API</span><span class="tag">HubSpot API</span><span class="tag">n8n</span>
+      </div>
+      <div class="pcard-time"><div class="dot"></div>Implementación: 3–5 días</div>
+      <a href="https://github.com/guillermobg08-a11y" target="_blank" class="pcard-cta">Ver código →</a>
+    </div>
+
+    <!-- 03 SINCRONIZACIÓN CRM AUTOMÁTICA -->
+    <div class="pcard fade-up" data-tags="crm">
+      <div class="pcard-header">
+        <div class="pcard-icon" style="background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.25);">🔄</div>
+        <div class="pcard-meta">
+          <div class="pcard-num">// 03</div>
+          <div class="pcard-title">Sincronización automática de CRM</div>
+        </div>
+        <span class="pcard-diff diff-med">MEDIO</span>
+      </div>
+      <p class="pcard-desc">
+        Mantiene sincronizados HubSpot, Pipedrive, Airtable y Google Sheets en tiempo real. Un cambio en una fuente se propaga al resto sin intervención manual. Elimina los datos duplicados, desactualizados y los errores de copy-paste entre herramientas.
+      </p>
+      <div class="wf">
+        <div class="wf-row">
+          <div class="wf-node wf-trigger"><div class="wf-icon">✏️</div>Cambio en CRM</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-api"><div class="wf-icon">🔄</div>Webhook n8n</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">🗺️</div>Mapeo campos</div>
+        </div>
+        <div class="wf-arrow-down">↓</div>
+        <div class="wf-row">
+          <div class="wf-node wf-crm"><div class="wf-icon">🟦</div>Pipedrive</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-storage"><div class="wf-icon">📋</div>Airtable</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-storage"><div class="wf-icon">📊</div>Sheets</div>
+        </div>
+      </div>
+      <div class="pcard-tags">
+        <span class="tag">n8n</span><span class="tag">HubSpot API</span><span class="tag">Pipedrive API</span><span class="tag">Airtable</span>
+      </div>
+      <div class="pcard-time"><div class="dot"></div>Implementación: 2–3 días</div>
+      <a href="https://github.com/guillermobg08-a11y" target="_blank" class="pcard-cta">Ver código →</a>
+    </div>
+
+    <!-- 04 SEGUIMIENTO AUTOMÁTICO -->
+    <div class="pcard fade-up" data-tags="seguimiento">
+      <div class="pcard-header">
+        <div class="pcard-icon" style="background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.25);">🔔</div>
+        <div class="pcard-meta">
+          <div class="pcard-num">// 04</div>
+          <div class="pcard-title">Secuencia de seguimiento automático</div>
+        </div>
+        <span class="pcard-diff diff-med">MEDIO</span>
+      </div>
+      <p class="pcard-desc">
+        Cuando un lead no responde, lanza una secuencia de follow-up automática por email y WhatsApp/Telegram: día 2, día 5 y día 10. Cada mensaje está personalizado con el nombre, empresa y contexto del lead. Se detiene en cuanto hay respuesta.
+      </p>
+      <div class="wf">
+        <div class="wf-row">
+          <div class="wf-node wf-trigger"><div class="wf-icon">🤫</div>Sin respuesta 48h</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">✍️</div>Personalizar msg</div>
+        </div>
+        <div class="wf-arrow-down">↓</div>
+        <div class="wf-row">
+          <div class="wf-node wf-output"><div class="wf-icon">📧</div>Email D+2</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-output"><div class="wf-icon">💬</div>WhatsApp D+5</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-output"><div class="wf-icon">📱</div>Telegram D+10</div>
+        </div>
+      </div>
+      <div class="pcard-tags">
+        <span class="tag">Python</span><span class="tag">n8n</span><span class="tag">smtplib</span><span class="tag">Telegram Bot</span>
+      </div>
+      <div class="pcard-time"><div class="dot"></div>Implementación: 2–3 días</div>
+      <a href="https://github.com/guillermobg08-a11y" target="_blank" class="pcard-cta">Ver código →</a>
+    </div>
+
+    <!-- 05 GENERADOR DE PROPUESTAS -->
+    <div class="pcard fade-up" data-tags="propuestas">
+      <div class="pcard-header">
+        <div class="pcard-icon" style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);">📄</div>
+        <div class="pcard-meta">
+          <div class="pcard-num">// 05</div>
+          <div class="pcard-title">Generador de propuestas comerciales</div>
+        </div>
+        <span class="pcard-diff diff-hard">AVANZADO</span>
+      </div>
+      <p class="pcard-desc">
+        Rellenas un formulario con los datos del cliente y el servicio, y Claude AI genera automáticamente la propuesta comercial completa en PDF: portada, resumen ejecutivo, alcance, metodología, entregables, plazos y precio. Lista para enviar en minutos.
+      </p>
+      <div class="wf">
+        <div class="wf-row">
+          <div class="wf-node wf-trigger"><div class="wf-icon">📝</div>Datos cliente</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-api"><div class="wf-icon">🤖</div>Claude AI</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">✍️</div>Redactar propuesta</div>
+        </div>
+        <div class="wf-arrow-down">↓</div>
+        <div class="wf-row">
+          <div class="wf-node wf-output"><div class="wf-icon">📄</div>PDF branded</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-output"><div class="wf-icon">📧</div>Email al cliente</div>
+        </div>
+      </div>
+      <div class="pcard-tags">
+        <span class="tag">Python</span><span class="tag">Claude API</span><span class="tag">ReportLab</span><span class="tag">Jinja2</span>
+      </div>
+      <div class="pcard-time"><div class="dot"></div>Implementación: 3–5 días</div>
+      <a href="https://github.com/guillermobg08-a11y" target="_blank" class="pcard-cta">Ver código →</a>
+    </div>
+
+    <!-- 06 MONITORING DE OPORTUNIDADES -->
+    <div class="pcard fade-up" data-tags="leads crm">
+      <div class="pcard-header">
+        <div class="pcard-icon" style="background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.25);">📡</div>
+        <div class="pcard-meta">
+          <div class="pcard-num">// 06</div>
+          <div class="pcard-title">Monitor de oportunidades de venta</div>
+        </div>
+        <span class="pcard-diff diff-med">MEDIO</span>
+      </div>
+      <p class="pcard-desc">
+        Monitoriza en tiempo real licitaciones públicas (BOE, PLACSP), menciones en LinkedIn y Twitter de keywords clave de tu sector, y avisos de contratación en portales especializados. Cuando aparece una oportunidad, te llega al Telegram con el resumen y el enlace.
+      </p>
+      <div class="wf">
+        <div class="wf-row">
+          <div class="wf-node wf-trigger"><div class="wf-icon">⏰</div>Cron cada hora</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-api"><div class="wf-icon">🔍</div>Scraping fuentes</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-api"><div class="wf-icon">🤖</div>Filtrar con IA</div>
+        </div>
+        <div class="wf-arrow-down">↓</div>
+        <div class="wf-row">
+          <div class="wf-node wf-output"><div class="wf-icon">📱</div>Telegram alert</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-crm"><div class="wf-icon">🟠</div>Crear opp. en CRM</div>
+        </div>
+      </div>
+      <div class="pcard-tags">
+        <span class="tag">Python</span><span class="tag">BeautifulSoup</span><span class="tag">Claude API</span><span class="tag">Telegram</span>
+      </div>
+      <div class="pcard-time"><div class="dot"></div>Implementación: 3–4 días</div>
+      <a href="https://github.com/guillermobg08-a11y" target="_blank" class="pcard-cta">Ver código →</a>
+    </div>
+
+    <!-- 07 REPORTE COMERCIAL SEMANAL -->
+    <div class="pcard fade-up" data-tags="reporting">
+      <div class="pcard-header">
+        <div class="pcard-icon" style="background:rgba(167,139,250,0.12);border:1px solid rgba(167,139,250,0.25);">📊</div>
+        <div class="pcard-meta">
+          <div class="pcard-num">// 07</div>
+          <div class="pcard-title">Reporte comercial semanal automático</div>
+        </div>
+        <span class="pcard-diff diff-easy">FÁCIL</span>
+      </div>
+      <p class="pcard-desc">
+        Cada lunes a las 8:00 genera y envía el reporte comercial de la semana: leads nuevos, pipeline actual, deals cerrados, tasa de conversión por fase, tiempo medio de cierre y comparativa vs semana anterior. En PDF y Slack.
+      </p>
+      <div class="wf">
+        <div class="wf-row">
+          <div class="wf-node wf-trigger"><div class="wf-icon">📅</div>Lunes 8:00</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-api"><div class="wf-icon">🟠</div>Pull CRM data</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">📊</div>Calcular KPIs</div>
+        </div>
+        <div class="wf-arrow-down">↓</div>
+        <div class="wf-row">
+          <div class="wf-node wf-output"><div class="wf-icon">📄</div>PDF report</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-output"><div class="wf-icon">💬</div>Slack/Teams</div>
+        </div>
+      </div>
+      <div class="pcard-tags">
+        <span class="tag">Python</span><span class="tag">HubSpot API</span><span class="tag">matplotlib</span><span class="tag">Slack API</span>
+      </div>
+      <div class="pcard-time"><div class="dot"></div>Implementación: 1–2 días</div>
+      <a href="https://github.com/guillermobg08-a11y" target="_blank" class="pcard-cta">Ver código →</a>
+    </div>
+
+    <!-- 08 ONBOARDING DE CLIENTE -->
+    <div class="pcard fade-up" data-tags="crm seguimiento">
+      <div class="pcard-header">
+        <div class="pcard-icon" style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);">🎉</div>
+        <div class="pcard-meta">
+          <div class="pcard-num">// 08</div>
+          <div class="pcard-title">Flujo de onboarding de cliente cerrado</div>
+        </div>
+        <span class="pcard-diff diff-med">MEDIO</span>
+      </div>
+      <p class="pcard-desc">
+        En cuanto se cierra un deal en el CRM, se dispara el flujo de onboarding: email de bienvenida personalizado, creación del proyecto en Notion/Asana, invitación al workspace, asignación del account manager y recordatorio de primera reunión. Todo en segundos.
+      </p>
+      <div class="wf">
+        <div class="wf-row">
+          <div class="wf-node wf-trigger"><div class="wf-icon">✅</div>Deal cerrado</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">📋</div>Crear proyecto</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-output"><div class="wf-icon">📧</div>Email bienvenida</div>
+        </div>
+        <div class="wf-arrow-down">↓</div>
+        <div class="wf-row">
+          <div class="wf-node wf-api"><div class="wf-icon">📓</div>Notion API</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-output"><div class="wf-icon">📅</div>Agendar reunión</div>
+        </div>
+      </div>
+      <div class="pcard-tags">
+        <span class="tag">n8n</span><span class="tag">Notion API</span><span class="tag">HubSpot API</span><span class="tag">Google Calendar</span>
+      </div>
+      <div class="pcard-time"><div class="dot"></div>Implementación: 2–3 días</div>
+      <a href="https://github.com/guillermobg08-a11y" target="_blank" class="pcard-cta">Ver código →</a>
+    </div>
+
+    <!-- 09 ALERTAS DE CHURN -->
+    <div class="pcard fade-up" data-tags="seguimiento crm">
+      <div class="pcard-header">
+        <div class="pcard-icon" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);">⚠️</div>
+        <div class="pcard-meta">
+          <div class="pcard-num">// 09</div>
+          <div class="pcard-title">Sistema de alerta de churn</div>
+        </div>
+        <span class="pcard-diff diff-hard">AVANZADO</span>
+      </div>
+      <p class="pcard-desc">
+        Detecta señales de abandono en clientes activos: sin actividad en 30 días, ticket sin resolver, NPS bajo o reducción en el uso del servicio. Lanza automáticamente una acción de retención — llamada del account, descuento o email de check-in — antes de que el cliente se vaya.
+      </p>
+      <div class="wf">
+        <div class="wf-row">
+          <div class="wf-node wf-trigger"><div class="wf-icon">📉</div>Señal de riesgo</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-api"><div class="wf-icon">🤖</div>Clasificar riesgo</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">🎯</div>Acción retención</div>
+        </div>
+        <div class="wf-arrow-down">↓</div>
+        <div class="wf-row">
+          <div class="wf-node wf-output"><div class="wf-icon">📞</div>Alerta account mgr</div>
+          <div class="wf-arrow"></div>
+          <div class="wf-node wf-crm"><div class="wf-icon">🟠</div>Tarea en CRM</div>
+        </div>
+      </div>
+      <div class="pcard-tags">
+        <span class="tag">Python</span><span class="tag">Claude API</span><span class="tag">HubSpot API</span><span class="tag">n8n</span>
+      </div>
+      <div class="pcard-time"><div class="dot"></div>Implementación: 4–6 días</div>
+      <a href="https://github.com/guillermobg08-a11y" target="_blank" class="pcard-cta">Ver código →</a>
+    </div>
+
+  </div>
+
+  <!-- SOFIA BANNER -->
+  <div class="sofia-banner">
+    <div class="sofia-banner-inner fade-up">
+      <div>
+        <h3>¿Tu web también necesita estar a punto para vender?</h3>
+        <p>SOFÍA audita SEO, velocidad y credibilidad de tu web en 60 segundos — porque una web lenta o mal posicionada corta el proceso de ventas antes de empezar.</p>
+      </div>
+      <a href="index.html#sofia" class="sofia-btn">🤖 Conocer SOFÍA →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Guillermo Bonito Guerrero · <a href="index.html">Volver al portfolio</a> · <a href="https://github.com/guillermobg08-a11y" target="_blank">GitHub</a></p>
+  </footer>
+
+  <script>
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+    const btns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.pcard[data-tags]');
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        cards.forEach(c => {
+          const tags = c.dataset.tags || '';
+          c.style.display = (f === 'all' || tags.includes(f)) ? '' : 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>
