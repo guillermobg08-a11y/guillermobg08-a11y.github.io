@@ -3,12 +3,790 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Guillermo Bonito — Automatización & Bots</title>
+  <title>Guillermo Bonito — Automatización &amp; Bots</title>
   <meta name="description" content="Portfolio de proyectos de automatización, bots de Telegram y scraping de datos." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #06060f;
+      --bg2: #0d0d1a;
+      --bg3: #12121f;
+      --purple: #7c6aff;
+      --purple-light: #a78bfa;
+      --purple-dark: #5b4fd8;
+      --amber: #f59e0b;
+      --cyan: #06b6d4;
+      --blue: #3b82f6;
+      --green: #10b981;
+      --glass: rgba(255,255,255,0.04);
+      --glass-border: rgba(255,255,255,0.08);
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-dim: #475569;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ===== ANIMATED DOT/GRID BACKGROUND ===== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 1px 1px, rgba(124,106,255,0.15) 1px, transparent 0);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+      animation: bgDrift 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes bgDrift {
+      from { background-position: 0 0; }
+      to { background-position: 40px 40px; }
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 20%, rgba(124,106,255,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(167,139,250,0.05) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* All direct children above background */
+    nav, main, footer, section, .hero, .stats-bar, .projects, .stack-section, .contact-section {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== FADE-IN-UP ANIMATION ===== */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== NAVBAR ===== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      background: rgba(6,6,15,0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .nav-logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .nav-logo .accent { color: var(--purple); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-github {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 1rem;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .nav-github:hover {
+      background: rgba(124,106,255,0.12);
+      border-color: var(--purple);
+      color: var(--purple-light);
+    }
+    .nav-github svg { width: 16px; height: 16px; }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 4rem;
+      padding: 6rem 4rem 4rem;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding: 6rem 2rem 3rem; }
+      .hero-terminal { display: none; }
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.3rem 0.9rem;
+      background: rgba(124,106,255,0.12);
+      border: 1px solid rgba(124,106,255,0.3);
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--purple-light);
+      letter-spacing: 0.05em;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #fff 0%, var(--purple-light) 40%, var(--purple) 70%, #c084fc 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradShift 4s ease infinite;
+    }
+
+    @keyframes gradShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.8rem;
+      background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+      color: #fff;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s;
+      box-shadow: 0 0 24px rgba(124,106,255,0.3);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(124,106,255,0.5);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.8rem;
+      background: var(--glass);
+      color: var(--text-muted);
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      border: 1px solid var(--glass-border);
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border-color: rgba(255,255,255,0.15);
+      transform: translateY(-2px);
+    }
+
+    /* ===== HERO TERMINAL ===== */
+    .hero-terminal {
+      background: #0a0a14;
+      border: 1px solid rgba(124,106,255,0.25);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 0 60px rgba(124,106,255,0.1), 0 32px 64px rgba(0,0,0,0.5);
+    }
+
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1rem;
+      background: rgba(255,255,255,0.04);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot-red { background: #ff5f57; }
+    .dot-yellow { background: #febc2e; }
+    .dot-green { background: #28c840; }
+
+    .terminal-title {
+      flex: 1;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .terminal-body {
+      padding: 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      line-height: 2;
+      min-height: 220px;
+    }
+
+    .t-line { display: flex; gap: 0.5rem; }
+    .t-prompt { color: var(--purple); user-select: none; }
+    .t-cmd { color: #a0f0a0; }
+    .t-out { color: var(--text-muted); padding-left: 1.2rem; font-size: 0.78rem; }
+    .t-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 1em;
+      background: var(--green);
+      margin-left: 2px;
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+    /* ===== STATS BAR ===== */
+    .stats-bar {
+      background: rgba(124,106,255,0.06);
+      border-top: 1px solid var(--glass-border);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 3rem 4rem;
+    }
+
+    .stats-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      text-align: center;
+    }
+
+    @media (max-width: 700px) {
+      .stats-inner { grid-template-columns: repeat(2, 1fr); }
+      .stats-bar { padding: 2rem; }
+    }
+
+    .stat-item {}
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      background: linear-gradient(135deg, var(--purple-light), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ===== SECTION COMMON ===== */
+    .section-wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 6rem 4rem;
+    }
+
+    @media (max-width: 700px) {
+      .section-wrap { padding: 4rem 1.5rem; }
+      .hero { padding: 5rem 1.5rem 3rem; }
+    }
+
+    .section-tag {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--purple);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .section-sub {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      margin-bottom: 3.5rem;
+    }
+
+    /* ===== PROJECTS GRID ===== */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(560px, 1fr));
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .projects-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ===== PROJECT CARD ===== */
+    .card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 0;
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      border-color: rgba(124,106,255,0.4);
+      box-shadow: 0 0 40px rgba(124,106,255,0.08), 0 16px 40px rgba(0,0,0,0.3);
+      transform: translateY(-4px);
+    }
+
+    .card-header {
+      padding: 1.5rem 1.5rem 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .card-icon-title {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(124,106,255,0.15);
+      border: 1px solid rgba(124,106,255,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.35rem;
+    }
+
+    .tag {
+      padding: 0.15rem 0.55rem;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .tag-purple { background: rgba(124,106,255,0.15); color: var(--purple-light); border: 1px solid rgba(124,106,255,0.25); }
+    .tag-amber { background: rgba(245,158,11,0.12); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
+    .tag-blue { background: rgba(59,130,246,0.12); color: #93c5fd; border: 1px solid rgba(59,130,246,0.25); }
+    .tag-green { background: rgba(16,185,129,0.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.25); }
+    .tag-cyan { background: rgba(6,182,212,0.12); color: #67e8f9; border: 1px solid rgba(6,182,212,0.25); }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .status-done {
+      background: rgba(16,185,129,0.12);
+      color: #6ee7b7;
+      border: 1px solid rgba(16,185,129,0.3);
+    }
+    .status-wip {
+      background: rgba(245,158,11,0.12);
+      color: #fcd34d;
+      border: 1px solid rgba(245,158,11,0.3);
+    }
+    .status-done::before { content: '●'; color: #10b981; font-size: 0.55rem; }
+    .status-wip::before { content: '●'; color: #f59e0b; font-size: 0.55rem; animation: pulse 1.5s ease infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .card-desc {
+      padding: 1rem 1.5rem 0;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ===== WORKFLOW ===== */
+    .workflow {
+      margin: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      overflow-x: auto;
+      padding: 1rem;
+      background: rgba(0,0,0,0.3);
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.05);
+      scrollbar-width: thin;
+      scrollbar-color: var(--glass-border) transparent;
+      flex-wrap: nowrap;
+    }
+
+    .wf-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.55rem 0.65rem;
+      border-radius: 8px;
+      border: 1px solid;
+      min-width: 60px;
+      flex-shrink: 0;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .wf-node:hover { transform: translateY(-2px); }
+
+    .wf-trigger {
+      background: rgba(245,158,11,0.1);
+      border-color: rgba(245,158,11,0.35);
+    }
+    .wf-trigger:hover { box-shadow: 0 0 16px rgba(245,158,11,0.25); }
+
+    .wf-process {
+      background: rgba(124,106,255,0.1);
+      border-color: rgba(124,106,255,0.35);
+    }
+    .wf-process:hover { box-shadow: 0 0 16px rgba(124,106,255,0.25); }
+
+    .wf-storage {
+      background: rgba(59,130,246,0.1);
+      border-color: rgba(59,130,246,0.35);
+    }
+    .wf-storage:hover { box-shadow: 0 0 16px rgba(59,130,246,0.25); }
+
+    .wf-output {
+      background: rgba(16,185,129,0.1);
+      border-color: rgba(16,185,129,0.35);
+    }
+    .wf-output:hover { box-shadow: 0 0 16px rgba(16,185,129,0.25); }
+
+    .wf-api {
+      background: rgba(6,182,212,0.1);
+      border-color: rgba(6,182,212,0.35);
+    }
+    .wf-api:hover { box-shadow: 0 0 16px rgba(6,182,212,0.25); }
+
+    .wf-icon { font-size: 1.1rem; line-height: 1; }
+
+    .wf-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .wf-arrow {
+      flex: 0 0 18px;
+      height: 2px;
+      background: linear-gradient(to right, rgba(124,106,255,0.4), rgba(124,106,255,0.6));
+      position: relative;
+      flex-shrink: 0;
+    }
+    .wf-arrow::after {
+      content: '';
+      position: absolute;
+      right: -1px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 4px solid transparent;
+      border-left: 6px solid rgba(124,106,255,0.6);
+    }
+
+    /* ===== USE CASES ===== */
+    .use-cases {
+      padding: 0 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .use-cases-title {
+      font-size: 0.72rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+
+    .use-cases ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .use-cases li {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 0.5rem;
+      align-items: flex-start;
+    }
+
+    .use-cases li::before {
+      content: '→';
+      color: var(--purple);
+      flex-shrink: 0;
+      margin-top: 0.02em;
+    }
+
+    /* ===== CARD FOOTER ===== */
+    .card-footer {
+      margin-top: auto;
+      padding: 1rem 1.5rem 1.25rem;
+      border-top: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .card-github {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .card-github:hover { color: var(--purple-light); }
+    .card-github svg { width: 15px; height: 15px; }
+
+    /* ===== STACK SECTION ===== */
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 1rem;
+    }
+
+    .stack-item {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 1.25rem 1rem;
+      text-align: center;
+      cursor: default;
+      transition: all 0.25s;
+    }
+
+    .stack-item:hover {
+      background: rgba(124,106,255,0.08);
+      border-color: rgba(124,106,255,0.4);
+      box-shadow: 0 0 24px rgba(124,106,255,0.2);
+      transform: translateY(-4px);
+    }
+
+    .stack-item:hover .stack-icon { filter: drop-shadow(0 0 8px rgba(124,106,255,0.6)); }
+
+    .stack-icon {
+      font-size: 2rem;
+      margin-bottom: 0.6rem;
+      display: block;
+      transition: filter 0.25s;
+    }
+
+    .stack-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ===== CONTACT SECTION ===== */
+    .contact-section {
+      background: linear-gradient(180deg, transparent 0%, rgba(124,106,255,0.04) 100%);
+      border-top: 1px solid var(--glass-border);
+    }
+
+    .contact-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 6rem 2rem;
+    }
+
+    .contact-inner .section-sub {
+      max-width: none;
+    }
+
+    .contact-buttons {
+      display: flex;
+      gap: 1.25rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2.5rem;
+    }
+
+    .btn-contact {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 1rem 2.2rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s;
+    }
+
+    .btn-contact-primary {
+      background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+      color: #fff;
+      box-shadow: 0 0 32px rgba(124,106,255,0.35);
+    }
+    .btn-contact-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 52px rgba(124,106,255,0.55);
+    }
+
+    .btn-contact-github {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      color: var(--text-muted);
+    }
+    .btn-contact-github:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.2);
+      color: var(--text);
+      transform: translateY(-3px);
+    }
+
+    .contact-availability {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+    .avail-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 1.5s ease infinite;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      border-top: 1px solid var(--glass-border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(124,106,255,0.25); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(124,106,255,0.45); }
+  </style>
 </head>
 <body>
 
@@ -19,287 +797,940 @@
       <a href="#proyectos">Proyectos</a>
       <a href="#stack">Stack</a>
       <a href="#contacto">Contacto</a>
+      <a class="nav-github" href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.164 6.839 9.49.5.09.682-.218.682-.483 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.16 22 16.416 22 12c0-5.523-4.477-10-10-10z"/></svg>
+        GitHub
+      </a>
     </div>
   </nav>
 
   <!-- HERO -->
   <section class="hero">
-    <div class="hero-content">
-      <p class="hero-tag">Automatización · Bots · Scraping</p>
-      <h1>Guillermo Bonito<br /><span class="accent">Guerrero</span></h1>
-      <p class="hero-sub">
-        Construyo herramientas que trabajan por ti — bots inteligentes,
-        scrapers de datos y automatizaciones que ahorran tiempo y generan resultados.
-      </p>
-      <div class="hero-cta">
-        <a href="#proyectos" class="btn-primary">Ver proyectos</a>
-        <a href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener" class="btn-ghost">
-          GitHub ↗
+    <div class="hero-left">
+      <p class="hero-tag">Automatización · Bots · Scraping · Python</p>
+      <h1><span class="gradient-text">Guillermo Bonito<br>Guerrero</span></h1>
+      <p class="hero-sub">Construyo sistemas que trabajan 24/7 — scrapers, bots y automatizaciones que generan resultados medibles.</p>
+      <div class="hero-ctas">
+        <a class="btn-primary" href="#proyectos">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>
+          Ver proyectos
+        </a>
+        <a class="btn-ghost" href="#contacto">
+          Hablemos →
         </a>
       </div>
     </div>
-    <div class="hero-code">
-      <pre><code><span class="c-kw">import</span> asyncio
-<span class="c-kw">from</span> telegram <span class="c-kw">import</span> Bot
-
-<span class="c-fn">async def</span> <span class="c-name">run</span>():
-    bot = Bot(token=TOKEN)
-    <span class="c-kw">await</span> bot.send_message(
-        chat_id=CHAT_ID,
-        text=<span class="c-str">"Automatización activa ✅"</span>
-    )
-
-asyncio.<span class="c-fn">run</span>(run())</code></pre>
+    <div class="hero-terminal">
+      <div class="terminal-bar">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+        <span class="terminal-title">~ guillermo@dev</span>
+      </div>
+      <div class="terminal-body" id="terminalBody">
+        <!-- filled by JS -->
+      </div>
     </div>
   </section>
 
-  <!-- STATS -->
-  <section class="stats">
-    <div class="stat">
-      <span class="stat-num">10+</span>
-      <span class="stat-label">Proyectos</span>
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat-item fade-up">
+        <div class="stat-number" data-target="10" data-suffix="+">0</div>
+        <div class="stat-label">Proyectos completados</div>
+      </div>
+      <div class="stat-item fade-up">
+        <div class="stat-number" data-target="5" data-suffix="+">0</div>
+        <div class="stat-label">Tecnologías core</div>
+      </div>
+      <div class="stat-item fade-up">
+        <div class="stat-number" data-target="24" data-suffix="/7">0</div>
+        <div class="stat-label">Disponibilidad</div>
+      </div>
+      <div class="stat-item fade-up">
+        <div class="stat-number" data-target="100" data-suffix="%">0</div>
+        <div class="stat-label">Open Source</div>
+      </div>
     </div>
-    <div class="stat">
-      <span class="stat-num">3</span>
-      <span class="stat-label">Tecnologías core</span>
-    </div>
-    <div class="stat">
-      <span class="stat-num">100%</span>
-      <span class="stat-label">Open Source</span>
-    </div>
-  </section>
+  </div>
 
-  <!-- PROYECTOS -->
-  <section class="section" id="proyectos">
-    <h2 class="section-title">Proyectos</h2>
-    <p class="section-sub">Herramientas reales, código real.</p>
+  <!-- PROJECTS -->
+  <section id="proyectos">
+    <div class="section-wrap">
+      <span class="section-tag fade-up">// proyectos</span>
+      <h2 class="section-title fade-up">Automatizaciones en producción</h2>
+      <p class="section-sub fade-up">Cada herramienta resuelve un problema real: desde monitoreo hasta generación de leads, construidas con Python y desplegadas para funcionar sin supervisión.</p>
 
-    <div class="projects-grid" id="projects-grid">
+      <div class="projects-grid">
 
-      <article class="card">
-        <div class="card-header">
-          <span class="card-icon">🔍</span>
-          <div class="card-tags">
-            <span class="tag">Python</span>
-            <span class="tag">Telegram</span>
-            <span class="tag">SEO</span>
+        <!-- 1. Web Auditor Bot -->
+        <div class="card fade-up">
+          <div class="card-header">
+            <div class="card-icon-title">
+              <div class="card-icon">🔍</div>
+              <div>
+                <div class="card-title">Web Auditor Bot</div>
+                <div class="card-tags">
+                  <span class="tag tag-purple">Python</span>
+                  <span class="tag tag-amber">Telegram</span>
+                  <span class="tag tag-cyan">BeautifulSoup</span>
+                  <span class="tag tag-blue">SEO</span>
+                </div>
+              </div>
+            </div>
+            <span class="status-badge status-wip">En progreso</span>
+          </div>
+          <p class="card-desc">Bot de Telegram que realiza auditorías completas de cualquier sitio web bajo demanda. Analiza velocidad de carga, metaetiquetas SEO, imágenes sin atributo alt, enlaces rotos y estructura de encabezados. Genera un informe legible directamente en el chat.</p>
+          <div class="workflow">
+            <div class="wf-node wf-trigger">
+              <div class="wf-icon">🤖</div>
+              <div class="wf-label">Telegram Bot</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">🌐</div>
+              <div class="wf-label">URL Fetcher</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">🔍</div>
+              <div class="wf-label">HTML Parser</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-api">
+              <div class="wf-icon">📊</div>
+              <div class="wf-label">SEO Analyzer</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">📝</div>
+              <div class="wf-label">Report Builder</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-output">
+              <div class="wf-icon">📱</div>
+              <div class="wf-label">Telegram Output</div>
+            </div>
+          </div>
+          <div class="use-cases">
+            <div class="use-cases-title">Casos de uso</div>
+            <ul>
+              <li>Agencias de marketing que auditan clientes de forma instantánea</li>
+              <li>Freelancers que detectan problemas antes de entregar proyectos</li>
+              <li>Propietarios de webs que monitorean su propio SEO</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <a class="card-github" href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.164 6.839 9.49.5.09.682-.218.682-.483 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.16 22 16.416 22 12c0-5.523-4.477-10-10-10z"/></svg>
+              Ver código
+            </a>
+            <span class="status-badge status-wip">WIP</span>
           </div>
         </div>
-        <h3>Web Auditor Bot</h3>
-        <p>Bot de Telegram que analiza cualquier URL y devuelve un informe de auditoría SEO/técnica: velocidad, metadatos, enlaces rotos y más.</p>
-        <div class="card-footer">
-          <a href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener" class="card-link">Ver código ↗</a>
-          <span class="status status-wip">En desarrollo</span>
-        </div>
-      </article>
 
-      <article class="card">
-        <div class="card-header">
-          <span class="card-icon">💰</span>
-          <div class="card-tags">
-            <span class="tag">Python</span>
-            <span class="tag">BeautifulSoup</span>
-            <span class="tag">SQLite</span>
+        <!-- 2. Price Tracker -->
+        <div class="card fade-up">
+          <div class="card-header">
+            <div class="card-icon-title">
+              <div class="card-icon">💰</div>
+              <div>
+                <div class="card-title">Price Tracker</div>
+                <div class="card-tags">
+                  <span class="tag tag-purple">Python</span>
+                  <span class="tag tag-amber">Telegram</span>
+                  <span class="tag tag-blue">SQLite</span>
+                  <span class="tag tag-cyan">Scraping</span>
+                </div>
+              </div>
+            </div>
+            <span class="status-badge status-done">Completado</span>
+          </div>
+          <p class="card-desc">Monitoriza precios de productos en Amazon.es, PCComponentes y MediaMarkt en tiempo real. Guarda el historial completo en SQLite con marca de tiempo y envía una alerta instantánea por Telegram cuando el precio cae por debajo del objetivo fijado por el usuario.</p>
+          <div class="workflow">
+            <div class="wf-node wf-trigger">
+              <div class="wf-icon">⏰</div>
+              <div class="wf-label">Scheduler</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">🌐</div>
+              <div class="wf-label">Web Scraper</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">💱</div>
+              <div class="wf-label">Price Parser</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-storage">
+              <div class="wf-icon">💾</div>
+              <div class="wf-label">SQLite DB</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-api">
+              <div class="wf-icon">🔔</div>
+              <div class="wf-label">Alert Checker</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-output">
+              <div class="wf-icon">📱</div>
+              <div class="wf-label">Telegram Alert</div>
+            </div>
+          </div>
+          <div class="use-cases">
+            <div class="use-cases-title">Casos de uso</div>
+            <ul>
+              <li>Comprar tecnología al mejor precio sin revisar páginas manualmente</li>
+              <li>Monitorear precios de la competencia en ecommerce</li>
+              <li>Detectar drops de precio en temporadas de oferta</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <a class="card-github" href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.164 6.839 9.49.5.09.682-.218.682-.483 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.16 22 16.416 22 12c0-5.523-4.477-10-10-10z"/></svg>
+              Ver código
+            </a>
+            <span class="status-badge status-done">Done</span>
           </div>
         </div>
-        <h3>Price Tracker</h3>
-        <p>Scraper que monitoriza precios en Amazon, PCComponentes y MediaMarkt. Guarda historial en SQLite y dispara alertas Telegram cuando el precio baja del objetivo.</p>
-        <div class="card-footer">
-          <a href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener" class="card-link">Ver código ↗</a>
-          <span class="status status-done">Completado</span>
-        </div>
-      </article>
 
-      <article class="card">
-        <div class="card-header">
-          <span class="card-icon">📋</span>
-          <div class="card-tags">
-            <span class="tag">Python</span>
-            <span class="tag">Google Maps API</span>
-            <span class="tag">CSV</span>
+        <!-- 3. Lead Generator -->
+        <div class="card fade-up">
+          <div class="card-header">
+            <div class="card-icon-title">
+              <div class="card-icon">🎯</div>
+              <div>
+                <div class="card-title">Lead Generator</div>
+                <div class="card-tags">
+                  <span class="tag tag-purple">Python</span>
+                  <span class="tag tag-cyan">Google Maps API</span>
+                  <span class="tag tag-green">CSV</span>
+                </div>
+              </div>
+            </div>
+            <span class="status-badge status-done">Completado</span>
+          </div>
+          <p class="card-desc">Herramienta CLI que busca negocios locales por nicho y ciudad usando la API de Google Maps. Extrae nombre, dirección, teléfono, web, puntuación y número de reseñas para cada resultado. Exporta todo a un CSV listo para prospectar con el nombre y fecha incluidos en el archivo.</p>
+          <div class="workflow">
+            <div class="wf-node wf-trigger">
+              <div class="wf-icon">🔎</div>
+              <div class="wf-label">Search Query</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-api">
+              <div class="wf-icon">🗺️</div>
+              <div class="wf-label">Google Maps API</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">📋</div>
+              <div class="wf-label">Details Fetcher</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">🔄</div>
+              <div class="wf-label">Paginator</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-output">
+              <div class="wf-icon">📊</div>
+              <div class="wf-label">CSV Exporter</div>
+            </div>
+          </div>
+          <div class="use-cases">
+            <div class="use-cases-title">Casos de uso</div>
+            <ul>
+              <li>Agencias de ventas que construyen listas de leads calificados</li>
+              <li>Freelancers prospectando clientes locales por sector</li>
+              <li>Empresas que analizan la competencia por zona geográfica</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <a class="card-github" href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.164 6.839 9.49.5.09.682-.218.682-.483 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.16 22 16.416 22 12c0-5.523-4.477-10-10-10z"/></svg>
+              Ver código
+            </a>
+            <span class="status-badge status-done">Done</span>
           </div>
         </div>
-        <h3>Lead Generator</h3>
-        <p>CLI que busca negocios por nicho y ciudad usando Google Maps API. Extrae nombre, teléfono, web, rating y lo exporta a CSV listo para prospectar.</p>
-        <div class="card-footer">
-          <a href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener" class="card-link">Ver código ↗</a>
-          <span class="status status-done">Completado</span>
-        </div>
-      </article>
 
-      <article class="card">
-        <div class="card-header">
-          <span class="card-icon">📰</span>
-          <div class="card-tags">
-            <span class="tag">Python</span>
-            <span class="tag">RSS</span>
-            <span class="tag">Telegram</span>
+        <!-- 4. News Digest Bot -->
+        <div class="card fade-up">
+          <div class="card-header">
+            <div class="card-icon-title">
+              <div class="card-icon">📰</div>
+              <div>
+                <div class="card-title">News Digest Bot</div>
+                <div class="card-tags">
+                  <span class="tag tag-purple">Python</span>
+                  <span class="tag tag-amber">Telegram</span>
+                  <span class="tag tag-cyan">RSS</span>
+                  <span class="tag tag-blue">feedparser</span>
+                </div>
+              </div>
+            </div>
+            <span class="status-badge status-done">Completado</span>
+          </div>
+          <p class="card-desc">Bot de Telegram que agrega noticias de múltiples fuentes RSS (El País Tecnología, Xataka, TechCrunch, Hacker News) y envía automáticamente cada día un resumen con los 3 titulares más recientes de cada fuente, con enlaces directos. Evita duplicados y gestiona mensajes largos dividiéndolos en partes.</p>
+          <div class="workflow">
+            <div class="wf-node wf-trigger">
+              <div class="wf-icon">⏰</div>
+              <div class="wf-label">Daily Timer</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-api">
+              <div class="wf-icon">📡</div>
+              <div class="wf-label">RSS Fetcher</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">🕐</div>
+              <div class="wf-label">Time Filter (24h)</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">✍️</div>
+              <div class="wf-label">HTML Formatter</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-output">
+              <div class="wf-icon">📱</div>
+              <div class="wf-label">Telegram Sender</div>
+            </div>
+          </div>
+          <div class="use-cases">
+            <div class="use-cases-title">Casos de uso</div>
+            <ul>
+              <li>Equipos que quieren mantenerse al día sin abrir webs</li>
+              <li>Newsletters personalizados con fuentes propias</li>
+              <li>Monitoreo de noticias por sector o competencia</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <a class="card-github" href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.164 6.839 9.49.5.09.682-.218.682-.483 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.16 22 16.416 22 12c0-5.523-4.477-10-10-10z"/></svg>
+              Ver código
+            </a>
+            <span class="status-badge status-done">Done</span>
           </div>
         </div>
-        <h3>News Digest Bot</h3>
-        <p>Bot que agrega RSS de múltiples fuentes (Xataka, TechCrunch, HN…), filtra artículos de las últimas 24h y envía un resumen diario formateado a Telegram.</p>
-        <div class="card-footer">
-          <a href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener" class="card-link">Ver código ↗</a>
-          <span class="status status-done">Completado</span>
-        </div>
-      </article>
 
-      <article class="card">
-        <div class="card-header">
-          <span class="card-icon">🟢</span>
-          <div class="card-tags">
-            <span class="tag">Python</span>
-            <span class="tag">aiohttp</span>
-            <span class="tag">asyncio</span>
+        <!-- 5. Website Monitor -->
+        <div class="card fade-up">
+          <div class="card-header">
+            <div class="card-icon-title">
+              <div class="card-icon">🖥️</div>
+              <div>
+                <div class="card-title">Website Monitor</div>
+                <div class="card-tags">
+                  <span class="tag tag-purple">Python</span>
+                  <span class="tag tag-cyan">asyncio</span>
+                  <span class="tag tag-cyan">aiohttp</span>
+                  <span class="tag tag-blue">SQLite</span>
+                </div>
+              </div>
+            </div>
+            <span class="status-badge status-done">Completado</span>
+          </div>
+          <p class="card-desc">Sistema de monitoreo asíncrono (asyncio + aiohttp) que comprueba el estado de múltiples sitios web en paralelo. Detecta caídas (status != 200), tiempo de respuesta elevado y cambios en el contenido esperado. Alerta por Telegram al instante cuando hay un cambio de estado y envía un resumen diario.</p>
+          <div class="workflow">
+            <div class="wf-node wf-trigger">
+              <div class="wf-icon">⏰</div>
+              <div class="wf-label">Interval Timer</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-api">
+              <div class="wf-icon">🌐</div>
+              <div class="wf-label">aiohttp Checker</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">⚡</div>
+              <div class="wf-label">Concurrent Runner</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-storage">
+              <div class="wf-icon">💾</div>
+              <div class="wf-label">SQLite State</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">🔔</div>
+              <div class="wf-label">Change Detector</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-output">
+              <div class="wf-icon">📱</div>
+              <div class="wf-label">Telegram Alert</div>
+            </div>
+          </div>
+          <div class="use-cases">
+            <div class="use-cases-title">Casos de uso</div>
+            <ul>
+              <li>Agencias que monitorizan webs de clientes 24/7</li>
+              <li>Ecommerces que necesitan uptime garantizado</li>
+              <li>Startups que no pueden permitirse herramientas de pago como Pingdom</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <a class="card-github" href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.164 6.839 9.49.5.09.682-.218.682-.483 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.16 22 16.416 22 12c0-5.523-4.477-10-10-10z"/></svg>
+              Ver código
+            </a>
+            <span class="status-badge status-done">Done</span>
           </div>
         </div>
-        <h3>Website Monitor</h3>
-        <p>Monitor de uptime concurrente con asyncio. Detecta caídas y cambios de contenido, alerta por Telegram en tiempo real y envía un resumen diario.</p>
-        <div class="card-footer">
-          <a href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener" class="card-link">Ver código ↗</a>
-          <span class="status status-done">Completado</span>
-        </div>
-      </article>
 
-      <article class="card">
-        <div class="card-header">
-          <span class="card-icon">📈</span>
-          <div class="card-tags">
-            <span class="tag">Python</span>
-            <span class="tag">Scraping</span>
-            <span class="tag">SQLite</span>
+        <!-- 6. Keyword Rank Tracker -->
+        <div class="card fade-up">
+          <div class="card-header">
+            <div class="card-icon-title">
+              <div class="card-icon">📈</div>
+              <div>
+                <div class="card-title">Keyword Rank Tracker</div>
+                <div class="card-tags">
+                  <span class="tag tag-purple">Python</span>
+                  <span class="tag tag-cyan">Google Scraper</span>
+                  <span class="tag tag-blue">SQLite</span>
+                  <span class="tag tag-green">Rich</span>
+                </div>
+              </div>
+            </div>
+            <span class="status-badge status-done">Completado</span>
+          </div>
+          <p class="card-desc">Rastrea la posición de cualquier URL en los resultados orgánicos de Google para un conjunto de palabras clave. Rota User-Agents y añade delays aleatorios para evitar bloqueos. Compara con el día anterior y muestra una tabla con flechas ↑↓ de evolución. Exporta historial a CSV y SQLite.</p>
+          <div class="workflow">
+            <div class="wf-node wf-trigger">
+              <div class="wf-icon">📝</div>
+              <div class="wf-label">Keywords List</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">🔍</div>
+              <div class="wf-label">Google Scraper</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">📍</div>
+              <div class="wf-label">Position Finder</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-storage">
+              <div class="wf-icon">💾</div>
+              <div class="wf-label">History DB</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">📈</div>
+              <div class="wf-label">Delta Calculator</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-output">
+              <div class="wf-icon">📊</div>
+              <div class="wf-label">Rich Table</div>
+            </div>
+          </div>
+          <div class="use-cases">
+            <div class="use-cases-title">Casos de uso</div>
+            <ul>
+              <li>SEOs que monitorean el ranking de sus clientes diariamente</li>
+              <li>Negocios que rastrean palabras clave de la competencia</li>
+              <li>Agencias que justifican resultados con datos históricos</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <a class="card-github" href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.164 6.839 9.49.5.09.682-.218.682-.483 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.16 22 16.416 22 12c0-5.523-4.477-10-10-10z"/></svg>
+              Ver código
+            </a>
+            <span class="status-badge status-done">Done</span>
           </div>
         </div>
-        <h3>Keyword Rank Tracker</h3>
-        <p>Rastrea la posición de URLs en Google para un conjunto de keywords. Muestra evolución diaria con flechas ↑↓ en tabla rich y exporta historial a CSV.</p>
-        <div class="card-footer">
-          <a href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener" class="card-link">Ver código ↗</a>
-          <span class="status status-done">Completado</span>
-        </div>
-      </article>
 
-      <article class="card">
-        <div class="card-header">
-          <span class="card-icon">▶️</span>
-          <div class="card-tags">
-            <span class="tag">Python</span>
-            <span class="tag">YouTube API</span>
-            <span class="tag">CSV</span>
+        <!-- 7. YouTube Scraper -->
+        <div class="card fade-up">
+          <div class="card-header">
+            <div class="card-icon-title">
+              <div class="card-icon">🎬</div>
+              <div>
+                <div class="card-title">YouTube Scraper</div>
+                <div class="card-tags">
+                  <span class="tag tag-purple">Python</span>
+                  <span class="tag tag-cyan">YouTube API v3</span>
+                  <span class="tag tag-green">CSV</span>
+                  <span class="tag tag-green">Rich</span>
+                </div>
+              </div>
+            </div>
+            <span class="status-badge status-done">Completado</span>
+          </div>
+          <p class="card-desc">Extrae métricas detalladas de YouTube usando la API v3. Modo búsqueda: localiza videos por query y obtiene vistas, likes, comentarios, duración y canal. Modo canal: analiza estadísticas generales y lista los últimos N videos con todas las métricas. Procesa hasta 50 IDs por petición para máxima eficiencia de cuota.</p>
+          <div class="workflow">
+            <div class="wf-node wf-trigger">
+              <div class="wf-icon">🔎</div>
+              <div class="wf-label">Query / Channel ID</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-api">
+              <div class="wf-icon">🎬</div>
+              <div class="wf-label">YouTube API v3</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">📦</div>
+              <div class="wf-label">Batch Fetcher (50/req)</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">⏱️</div>
+              <div class="wf-label">Duration Parser</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-output">
+              <div class="wf-icon">📊</div>
+              <div class="wf-label">CSV + Rich Table</div>
+            </div>
+          </div>
+          <div class="use-cases">
+            <div class="use-cases-title">Casos de uso</div>
+            <ul>
+              <li>Agencias de marketing que analizan nichos de contenido</li>
+              <li>Creadores que estudian métricas de la competencia</li>
+              <li>Marcas que buscan influencers para colaboraciones</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <a class="card-github" href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.164 6.839 9.49.5.09.682-.218.682-.483 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.16 22 16.416 22 12c0-5.523-4.477-10-10-10z"/></svg>
+              Ver código
+            </a>
+            <span class="status-badge status-done">Done</span>
           </div>
         </div>
-        <h3>YouTube Scraper</h3>
-        <p>Extrae métricas de videos y canales vía YouTube Data API v3. Modos: búsqueda por query o análisis completo de canal. Exporta views, likes, duración y más a CSV.</p>
-        <div class="card-footer">
-          <a href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener" class="card-link">Ver código ↗</a>
-          <span class="status status-done">Completado</span>
-        </div>
-      </article>
 
-      <article class="card">
-        <div class="card-header">
-          <span class="card-icon">✉️</span>
-          <div class="card-tags">
-            <span class="tag">Python</span>
-            <span class="tag">SMTP</span>
-            <span class="tag">HTML</span>
+        <!-- 8. Email Sender Masivo -->
+        <div class="card fade-up">
+          <div class="card-header">
+            <div class="card-icon-title">
+              <div class="card-icon">✉️</div>
+              <div>
+                <div class="card-title">Email Sender Masivo</div>
+                <div class="card-tags">
+                  <span class="tag tag-purple">Python</span>
+                  <span class="tag tag-blue">SMTP</span>
+                  <span class="tag tag-cyan">HTML Templates</span>
+                  <span class="tag tag-green">CSV</span>
+                </div>
+              </div>
+            </div>
+            <span class="status-badge status-done">Completado</span>
+          </div>
+          <p class="card-desc">Envía correos HTML personalizados a una lista de contactos desde un CSV. Reemplaza placeholders (nombre, empresa, campos custom) en una plantilla HTML. Lleva un log de enviados para ser reanudable: si se interrumpe, retoma desde donde lo dejó sin duplicar envíos. Compatible con Gmail y cualquier SMTP. Incluye modo dry-run.</p>
+          <div class="workflow">
+            <div class="wf-node wf-trigger">
+              <div class="wf-icon">📋</div>
+              <div class="wf-label">Contacts CSV</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">📝</div>
+              <div class="wf-label">Template Engine</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">🔄</div>
+              <div class="wf-label">Dedup Checker</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-api">
+              <div class="wf-icon">✉️</div>
+              <div class="wf-label">SMTP Sender</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">⏳</div>
+              <div class="wf-label">Rate Limiter</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-storage">
+              <div class="wf-icon">📝</div>
+              <div class="wf-label">Sent Log</div>
+            </div>
+          </div>
+          <div class="use-cases">
+            <div class="use-cases-title">Casos de uso</div>
+            <ul>
+              <li>Campañas de email marketing con personalización real</li>
+              <li>Outreach de ventas B2B con campos custom por empresa</li>
+              <li>Envío de propuestas personalizadas a prospectos</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <a class="card-github" href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.164 6.839 9.49.5.09.682-.218.682-.483 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.16 22 16.416 22 12c0-5.523-4.477-10-10-10z"/></svg>
+              Ver código
+            </a>
+            <span class="status-badge status-done">Done</span>
           </div>
         </div>
-        <h3>Email Sender Masivo</h3>
-        <p>Envía emails HTML personalizados desde CSV. Reanudable (saltea ya-enviados), modo dry-run, barra de progreso y log de resultados. Compatible con Gmail y cualquier SMTP.</p>
-        <div class="card-footer">
-          <a href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener" class="card-link">Ver código ↗</a>
-          <span class="status status-done">Completado</span>
-        </div>
-      </article>
 
-      <article class="card">
-        <div class="card-header">
-          <span class="card-icon">📄</span>
-          <div class="card-tags">
-            <span class="tag">Python</span>
-            <span class="tag">pdfplumber</span>
-            <span class="tag">Excel</span>
+        <!-- 9. Google Reviews Scraper -->
+        <div class="card fade-up">
+          <div class="card-header">
+            <div class="card-icon-title">
+              <div class="card-icon">⭐</div>
+              <div>
+                <div class="card-title">Google Reviews Scraper</div>
+                <div class="card-tags">
+                  <span class="tag tag-purple">Python</span>
+                  <span class="tag tag-cyan">Places API</span>
+                  <span class="tag tag-amber">Sentiment</span>
+                  <span class="tag tag-green">CSV</span>
+                </div>
+              </div>
+            </div>
+            <span class="status-badge status-done">Completado</span>
+          </div>
+          <p class="card-desc">Busca cualquier negocio en Google Maps por nombre y ciudad, extrae sus reseñas usando la Places API y realiza análisis de sentimiento básico (positivo/negativo/neutral) con diccionario en español e inglés. Muestra distribución de estrellas, rating promedio y exporta todo a CSV.</p>
+          <div class="workflow">
+            <div class="wf-node wf-trigger">
+              <div class="wf-icon">🔎</div>
+              <div class="wf-label">Business Search</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-api">
+              <div class="wf-icon">🗺️</div>
+              <div class="wf-label">Places API</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">⭐</div>
+              <div class="wf-label">Reviews Fetcher</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">🧠</div>
+              <div class="wf-label">Sentiment Analysis</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">📊</div>
+              <div class="wf-label">Stats Calculator</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-output">
+              <div class="wf-icon">📋</div>
+              <div class="wf-label">CSV Export</div>
+            </div>
+          </div>
+          <div class="use-cases">
+            <div class="use-cases-title">Casos de uso</div>
+            <ul>
+              <li>Restaurantes y negocios que analizan su reputación online</li>
+              <li>Agencias de reputación digital</li>
+              <li>Competidores que estudian reseñas del sector</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <a class="card-github" href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.164 6.839 9.49.5.09.682-.218.682-.483 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.16 22 16.416 22 12c0-5.523-4.477-10-10-10z"/></svg>
+              Ver código
+            </a>
+            <span class="status-badge status-done">Done</span>
           </div>
         </div>
-        <h3>PDF Data Extractor</h3>
-        <p>Extrae texto, tablas y metadatos de PDFs. Exporta cada tabla como hoja Excel, el texto a .txt y los metadatos a JSON. Procesa carpetas enteras en batch.</p>
-        <div class="card-footer">
-          <a href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener" class="card-link">Ver código ↗</a>
-          <span class="status status-done">Completado</span>
-        </div>
-      </article>
 
-      <article class="card">
-        <div class="card-header">
-          <span class="card-icon">⭐</span>
-          <div class="card-tags">
-            <span class="tag">Python</span>
-            <span class="tag">Google Places API</span>
-            <span class="tag">NLP</span>
+        <!-- 10. Crypto Alert Bot -->
+        <div class="card fade-up">
+          <div class="card-header">
+            <div class="card-icon-title">
+              <div class="card-icon">₿</div>
+              <div>
+                <div class="card-title">Crypto Alert Bot</div>
+                <div class="card-tags">
+                  <span class="tag tag-purple">Python</span>
+                  <span class="tag tag-amber">Telegram</span>
+                  <span class="tag tag-cyan">CoinGecko API</span>
+                </div>
+              </div>
+            </div>
+            <span class="status-badge status-done">Completado</span>
+          </div>
+          <p class="card-desc">Monitoriza precios de criptomonedas en tiempo real usando la API pública de CoinGecko (sin API key). Envía alertas Telegram cuando el precio cruza un umbral definido, con cooldown de 1 hora para evitar spam. Muestra un dashboard live en terminal con precio, cambio 24h, market cap y estado de alertas.</p>
+          <div class="workflow">
+            <div class="wf-node wf-trigger">
+              <div class="wf-icon">⏰</div>
+              <div class="wf-label">60s Timer</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-api">
+              <div class="wf-icon">📈</div>
+              <div class="wf-label">CoinGecko API</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">🔔</div>
+              <div class="wf-label">Threshold Checker</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">⏱️</div>
+              <div class="wf-label">Cooldown Guard</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">📊</div>
+              <div class="wf-label">Terminal Dashboard</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-output">
+              <div class="wf-icon">📱</div>
+              <div class="wf-label">Telegram Alert</div>
+            </div>
+          </div>
+          <div class="use-cases">
+            <div class="use-cases-title">Casos de uso</div>
+            <ul>
+              <li>Traders que quieren alertas sin pagar por herramientas premium</li>
+              <li>Inversores DCA que compran en caídas de precio</li>
+              <li>Comunidades crypto que comparten señales de precio</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <a class="card-github" href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.164 6.839 9.49.5.09.682-.218.682-.483 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.16 22 16.416 22 12c0-5.523-4.477-10-10-10z"/></svg>
+              Ver código
+            </a>
+            <span class="status-badge status-done">Done</span>
           </div>
         </div>
-        <h3>Google Reviews Scraper</h3>
-        <p>Extrae reseñas de cualquier negocio en Google Maps. Análisis de sentimiento en español/inglés, distribución de estrellas y exportación a CSV.</p>
-        <div class="card-footer">
-          <a href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener" class="card-link">Ver código ↗</a>
-          <span class="status status-done">Completado</span>
-        </div>
-      </article>
 
-      <article class="card">
-        <div class="card-header">
-          <span class="card-icon">₿</span>
-          <div class="card-tags">
-            <span class="tag">Python</span>
-            <span class="tag">CoinGecko API</span>
-            <span class="tag">Telegram</span>
-          </div>
-        </div>
-        <h3>Crypto Alert Bot</h3>
-        <p>Monitoriza precios de criptomonedas vía CoinGecko (sin API key). Alertas Telegram con cooldown anti-spam, dashboard live en terminal y soporte multi-moneda.</p>
-        <div class="card-footer">
-          <a href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener" class="card-link">Ver código ↗</a>
-          <span class="status status-done">Completado</span>
-        </div>
-      </article>
-
+      </div>
     </div>
   </section>
 
   <!-- STACK -->
-  <section class="section section-dark" id="stack">
-    <h2 class="section-title">Stack tecnológico</h2>
-    <p class="section-sub">Las herramientas con las que trabajo.</p>
-    <div class="stack-grid">
-      <div class="stack-item"><span class="stack-icon">🐍</span><span>Python</span></div>
-      <div class="stack-item"><span class="stack-icon">🤖</span><span>python-telegram-bot</span></div>
-      <div class="stack-item"><span class="stack-icon">🌐</span><span>BeautifulSoup / Requests</span></div>
-      <div class="stack-item"><span class="stack-icon">⚡</span><span>Playwright / Selenium</span></div>
-      <div class="stack-item"><span class="stack-icon">🗄️</span><span>SQLite / PostgreSQL</span></div>
-      <div class="stack-item"><span class="stack-icon">☁️</span><span>GitHub Actions / VPS</span></div>
+  <section id="stack">
+    <div class="section-wrap">
+      <span class="section-tag fade-up">// stack</span>
+      <h2 class="section-title fade-up">Tecnologías que uso</h2>
+      <p class="section-sub fade-up">Las herramientas que conforman mi ecosistema de automatización y scripting.</p>
+      <div class="stack-grid">
+        <div class="stack-item fade-up"><span class="stack-icon">🐍</span><div class="stack-name">Python</div></div>
+        <div class="stack-item fade-up"><span class="stack-icon">🤖</span><div class="stack-name">python-telegram-bot</div></div>
+        <div class="stack-item fade-up"><span class="stack-icon">🌐</span><div class="stack-name">BeautifulSoup</div></div>
+        <div class="stack-item fade-up"><span class="stack-icon">⚡</span><div class="stack-name">aiohttp</div></div>
+        <div class="stack-item fade-up"><span class="stack-icon">📦</span><div class="stack-name">requests</div></div>
+        <div class="stack-item fade-up"><span class="stack-icon">💾</span><div class="stack-name">SQLite</div></div>
+        <div class="stack-item fade-up"><span class="stack-icon">📊</span><div class="stack-name">pandas</div></div>
+        <div class="stack-item fade-up"><span class="stack-icon">🎨</span><div class="stack-name">Rich</div></div>
+        <div class="stack-item fade-up"><span class="stack-icon">🗺️</span><div class="stack-name">Google Maps API</div></div>
+        <div class="stack-item fade-up"><span class="stack-icon">🎬</span><div class="stack-name">YouTube API v3</div></div>
+        <div class="stack-item fade-up"><span class="stack-icon">📡</span><div class="stack-name">feedparser</div></div>
+        <div class="stack-item fade-up"><span class="stack-icon">🐙</span><div class="stack-name">Git / GitHub</div></div>
+      </div>
     </div>
   </section>
 
-  <!-- CONTACTO -->
-  <section class="section" id="contacto">
-    <h2 class="section-title">Hablemos</h2>
-    <p class="section-sub">¿Tienes un proceso que automatizar? Cuéntame.</p>
-    <div class="contact-links">
-      <a href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener" class="contact-btn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-        GitHub
-      </a>
-      <a href="https://www.linkedin.com/in/guillermobg08" target="_blank" rel="noopener" class="contact-btn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-        LinkedIn
-      </a>
+  <!-- CONTACT -->
+  <section id="contacto" class="contact-section">
+    <div class="contact-inner fade-up">
+      <span class="section-tag">// contacto</span>
+      <h2 class="section-title" style="font-size:clamp(2rem,4vw,3rem);margin-bottom:1rem;">¿Tienes un proyecto en mente?</h2>
+      <p class="section-sub">Si necesitas automatizar procesos, construir un bot o extraer datos a escala, hablemos. Construyo soluciones a medida que funcionan sin supervisión.</p>
+      <div class="contact-buttons">
+        <a class="btn-contact btn-contact-primary" href="https://t.me/guillermo_dev" target="_blank" rel="noopener">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          Telegram
+        </a>
+        <a class="btn-contact btn-contact-github" href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.164 6.839 9.49.5.09.682-.218.682-.483 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.16 22 16.416 22 12c0-5.523-4.477-10-10-10z"/></svg>
+          GitHub
+        </a>
+      </div>
+      <div class="contact-availability">
+        <span class="avail-dot"></span>
+        Disponible para proyectos freelance
+      </div>
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <p>Guillermo Bonito Guerrero · <a href="https://github.com/guillermobg08-a11y" target="_blank" rel="noopener">guillermobg08-a11y</a></p>
+  <footer>
+    <span>GB<span style="color:var(--purple)">.</span> &mdash; Guillermo Bonito Guerrero &mdash; 2025</span>
   </footer>
+
+  <script>
+    // ===== INTERSECTION OBSERVER: fade-in-up =====
+    const fadeEls = document.querySelectorAll('.fade-up');
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          // stagger siblings in the same parent
+          const siblings = [...entry.target.parentElement.querySelectorAll('.fade-up:not(.visible)')];
+          const delay = siblings.indexOf(entry.target) * 80;
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, Math.max(0, delay));
+          fadeObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    fadeEls.forEach(el => fadeObserver.observe(el));
+
+    // ===== COUNTER ANIMATION =====
+    const counters = document.querySelectorAll('.stat-number[data-target]');
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.target, 10);
+          const suffix = el.dataset.suffix || '';
+          const duration = 1400;
+          const start = performance.now();
+
+          function step(now) {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            // ease-out cubic
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const value = Math.round(eased * target);
+            el.textContent = value + suffix;
+            if (progress < 1) requestAnimationFrame(step);
+          }
+
+          requestAnimationFrame(step);
+          counterObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    counters.forEach(el => counterObserver.observe(el));
+
+    // ===== TERMINAL TYPEWRITER =====
+    const terminalBody = document.getElementById('terminalBody');
+    const lines = [
+      { prompt: '~/bots $', cmd: 'python price_tracker.py --target 299', delay: 60 },
+      { out: '✓ Monitorizando 12 productos en 3 tiendas...' },
+      { prompt: '~/bots $', cmd: 'python lead_gen.py --query "dentista Madrid" --limit 50', delay: 55 },
+      { out: '✓ 50 leads exportados → leads_dentista_Madrid_2025.csv' },
+      { prompt: '~/bots $', cmd: 'python website_monitor.py --sites sites.txt', delay: 65 },
+      { out: '✓ Comprobando 8 sitios cada 5 min — alertas activadas' },
+      { prompt: '~/bots $', cmd: 'python audit_bot.py', delay: 70 },
+      { out: '✓ Bot iniciado — esperando URLs en Telegram...' },
+      { prompt: '~/bots $', cmd: '', delay: 0, cursor: true },
+    ];
+
+    let lineIdx = 0;
+    let charIdx = 0;
+    let phase = 'cmd'; // 'cmd' | 'out' | 'pause'
+
+    function renderLines() {
+      terminalBody.innerHTML = '';
+      for (let i = 0; i < lineIdx; i++) {
+        const l = lines[i];
+        if (l.out) {
+          const d = document.createElement('div');
+          d.className = 't-line t-out';
+          d.textContent = l.out;
+          terminalBody.appendChild(d);
+        } else {
+          const d = document.createElement('div');
+          d.className = 't-line';
+          const p = document.createElement('span');
+          p.className = 't-prompt';
+          p.textContent = l.prompt;
+          const c = document.createElement('span');
+          c.className = 't-cmd';
+          c.textContent = l.cmd;
+          d.appendChild(p);
+          d.appendChild(document.createTextNode(' '));
+          d.appendChild(c);
+          terminalBody.appendChild(d);
+        }
+      }
+    }
+
+    function addCurrentLine(text, isCursor) {
+      const existing = terminalBody.querySelector('.t-current');
+      if (existing) existing.remove();
+
+      const l = lines[lineIdx];
+      if (l && l.out) {
+        const d = document.createElement('div');
+        d.className = 't-line t-out t-current';
+        d.textContent = text;
+        terminalBody.appendChild(d);
+      } else if (l) {
+        const d = document.createElement('div');
+        d.className = 't-line t-current';
+        const p = document.createElement('span');
+        p.className = 't-prompt';
+        p.textContent = l.prompt;
+        const c = document.createElement('span');
+        c.className = 't-cmd';
+        c.textContent = text;
+        d.appendChild(p);
+        d.appendChild(document.createTextNode(' '));
+        d.appendChild(c);
+        if (isCursor) {
+          const cur = document.createElement('span');
+          cur.className = 't-cursor';
+          d.appendChild(cur);
+        }
+        terminalBody.appendChild(d);
+      }
+      // scroll to bottom
+      terminalBody.scrollTop = terminalBody.scrollHeight;
+    }
+
+    function typeNext() {
+      if (lineIdx >= lines.length) {
+        // restart
+        lineIdx = 0; charIdx = 0; phase = 'cmd';
+        terminalBody.innerHTML = '';
+        setTimeout(typeNext, 1500);
+        return;
+      }
+
+      const l = lines[lineIdx];
+
+      if (l.cursor) {
+        renderLines();
+        addCurrentLine('', true);
+        return;
+      }
+
+      if (l.out) {
+        // show output instantly with slight pause
+        renderLines();
+        addCurrentLine(l.out, false);
+        lineIdx++;
+        charIdx = 0;
+        setTimeout(typeNext, 600);
+        return;
+      }
+
+      // typing command
+      const full = l.cmd;
+      if (charIdx <= full.length) {
+        renderLines();
+        addCurrentLine(full.slice(0, charIdx), true);
+        charIdx++;
+        const speed = (l.delay || 60) + Math.random() * 40;
+        setTimeout(typeNext, speed);
+      } else {
+        // done typing, move to next line
+        lineIdx++;
+        charIdx = 0;
+        setTimeout(typeNext, 500);
+      }
+    }
+
+    setTimeout(typeNext, 800);
+  </script>
 
 </body>
 </html>
