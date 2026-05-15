@@ -798,9 +798,12 @@
         gap: 0.75rem !important;
       }
 
-      /* SOFIA stats — 3 cols (5 items: 3+2) */
+      /* SOFIA stats — 3 cols (5 items: 3+2, último centrado) */
       div[style*="grid-template-columns:repeat(5,1fr)"] {
         grid-template-columns: repeat(3, 1fr) !important;
+      }
+      div[style*="grid-template-columns:repeat(5,1fr)"] > div:last-child {
+        grid-column: 1 / -1;
       }
 
       /* SECTORES grid */
