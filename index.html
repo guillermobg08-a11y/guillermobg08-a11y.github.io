@@ -994,9 +994,35 @@
 
   <!-- PROJECTS -->
   <!-- ── SOFÍA FLAGSHIP ──────────────────────────────────────── -->
-  <section id="sofia" style="padding: 7rem 0 5rem; background: linear-gradient(180deg, #06060f 0%, #08061a 40%, #06060f 100%); position: relative; overflow: hidden;">
+  <section id="sofia" style="padding: 7rem 0 5rem; background: linear-gradient(180deg, #06060f 0%, #070b1e 40%, #06060f 100%); position: relative; overflow: hidden;">
     <div style="position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:1100px;height:700px;background:radial-gradient(ellipse,rgba(124,106,255,0.1) 0%,transparent 65%);pointer-events:none;"></div>
     <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(124,106,255,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(124,106,255,0.035) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+    <!-- Sphere decoration (inspired by SOFIAtrends Canva branding) -->
+    <svg style="position:absolute;right:-80px;top:50%;transform:translateY(-50%);width:520px;height:520px;opacity:0.07;pointer-events:none;" viewBox="-1 -1 2 2" xmlns="http://www.w3.org/2000/svg">
+      <g stroke="#7c6aff" stroke-width="0.012" fill="none">
+        <ellipse cx="0" cy="0" rx="1" ry="0.3"/>
+        <ellipse cx="0" cy="0" rx="1" ry="0.5"/>
+        <ellipse cx="0" cy="0" rx="1" ry="0.7"/>
+        <ellipse cx="0" cy="0" rx="1" ry="0.9"/>
+        <ellipse cx="0" cy="0" rx="0.3" ry="1" transform="rotate(90)"/>
+        <ellipse cx="0" cy="0" rx="0.5" ry="1" transform="rotate(90)"/>
+        <ellipse cx="0" cy="0" rx="0.7" ry="1" transform="rotate(90)"/>
+        <ellipse cx="0" cy="0" rx="0.9" ry="1" transform="rotate(90)"/>
+        <ellipse cx="0" cy="0" rx="1" ry="0.4" transform="rotate(45)"/>
+        <ellipse cx="0" cy="0" rx="1" ry="0.4" transform="rotate(-45)"/>
+        <circle cx="0" cy="0" r="1"/>
+        <line x1="-1" y1="0" x2="1" y2="0"/>
+        <line x1="0" y1="-1" x2="0" y2="1"/>
+        <line x1="-0.71" y1="-0.71" x2="0.71" y2="0.71"/>
+        <line x1="0.71" y1="-0.71" x2="-0.71" y2="0.71"/>
+      </g>
+      <g fill="#60a5fa" opacity="0.8">
+        <circle cx="0" cy="-1" r="0.025"/>
+        <circle cx="0" cy="1" r="0.025"/>
+        <circle cx="-1" cy="0" r="0.025"/>
+        <circle cx="1" cy="0" r="0.025"/>
+      </g>
+    </svg>
 
     <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;position:relative;z-index:1;">
 
@@ -1009,7 +1035,10 @@
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;">
           <div>
             <div style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#7c6aff;margin-bottom:0.75rem;">SaaS · IA Generativa · Auditoría Web</div>
-            <h2 style="font-size:clamp(3rem,6vw,5rem);font-weight:800;letter-spacing:-0.04em;line-height:1;background:linear-gradient(135deg,#fff 0%,#c084fc 45%,#7c6aff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.75rem;">SOFÍA</h2>
+            <h2 style="font-size:clamp(3rem,6vw,5rem);font-weight:800;letter-spacing:-0.04em;line-height:1;margin-bottom:0.75rem;display:flex;align-items:baseline;gap:0.15em;flex-wrap:wrap;">
+              <span style="background:linear-gradient(135deg,#fff 0%,#c084fc 45%,#7c6aff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">SOFIA</span><span style="font-size:0.55em;font-style:italic;font-weight:300;color:#a78bfa;-webkit-text-fill-color:#a78bfa;letter-spacing:0.02em;font-family:Georgia,'Times New Roman',serif;">trends</span>
+            </h2>
+            <div style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:#4a4a80;margin-bottom:1rem;margin-top:-0.5rem;">VisualDrop Group 001</div>
             <p style="font-size:1.2rem;color:#9090c0;line-height:1.5;max-width:440px;">Plataforma que lanza <strong style="color:#e8e8f5;">6 agentes de IA en paralelo</strong> para auditar cualquier web en menos de 60 segundos. SEO, velocidad, seguridad y accesibilidad — todo en un solo informe PDF.</p>
           </div>
           <!-- RIGHT mockup -->
@@ -1117,7 +1146,7 @@
           <div style="background:rgba(13,13,26,0.7);border:1px solid rgba(34,211,238,0.2);border-radius:14px;padding:1.4rem;" onmouseover="this.style.borderColor='rgba(34,211,238,0.5)'" onmouseout="this.style.borderColor='rgba(34,211,238,0.2)'">
             <div style="font-size:1.5rem;margin-bottom:0.75rem;">🔔</div>
             <div style="font-size:0.95rem;font-weight:700;color:#e8e8f5;margin-bottom:0.4rem;">Monitoreo automático</div>
-            <div style="font-size:0.8rem;color:#6868a0;line-height:1.6;margin-bottom:0.75rem;">SOFÍA vigila tus webs semanalmente y envía alerta si el score baja significativamente. Histórico con tendencias.</div>
+            <div style="font-size:0.8rem;color:#6868a0;line-height:1.6;margin-bottom:0.75rem;">SOFIAtrends vigila tus webs semanalmente y envía alerta si el score baja significativamente. Histórico con tendencias.</div>
             <div style="display:flex;flex-wrap:wrap;gap:0.3rem;">
               <span style="font-size:0.6rem;background:rgba(34,211,238,0.1);color:#22d3ee;border-radius:4px;padding:0.2rem 0.5rem;">Alertas</span>
               <span style="font-size:0.6rem;background:rgba(34,211,238,0.1);color:#22d3ee;border-radius:4px;padding:0.2rem 0.5rem;">Histórico</span>
@@ -1176,7 +1205,7 @@
             </div>
             <div style="display:flex;gap:1rem;align-items:flex-start;">
               <div style="width:32px;height:32px;border-radius:50%;background:rgba(124,106,255,0.15);border:1px solid rgba(124,106,255,0.3);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#a78bfa;flex-shrink:0;">02</div>
-              <div><div style="font-size:0.9rem;font-weight:600;color:#e8e8f5;margin-bottom:0.2rem;">SOFÍA analiza con IA</div><div style="font-size:0.8rem;color:#6868a0;">6 agentes en paralelo: SEO, velocidad, seguridad, accesibilidad, estructura y competencia.</div></div>
+              <div><div style="font-size:0.9rem;font-weight:600;color:#e8e8f5;margin-bottom:0.2rem;">SOFIAtrends analiza con IA</div><div style="font-size:0.8rem;color:#6868a0;">6 agentes en paralelo: SEO, velocidad, seguridad, accesibilidad, estructura y competencia.</div></div>
             </div>
             <div style="display:flex;gap:1rem;align-items:flex-start;">
               <div style="width:32px;height:32px;border-radius:50%;background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.3);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#34d399;flex-shrink:0;">03</div>
