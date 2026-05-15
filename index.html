@@ -740,6 +740,119 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(124,106,255,0.25); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(124,106,255,0.45); }
+
+    /* ===== MOBILE RESPONSIVE ===== */
+    @media (max-width: 640px) {
+
+      /* NAV */
+      .nav { padding: 0 1rem; height: 56px; }
+      .nav-links { gap: 1rem; }
+      .nav-links a { font-size: 0.8rem; }
+      /* hide less important nav links on small screens */
+      .nav-links a[href="#stack"],
+      .nav-links a[href="#contacto"] { display: none; }
+
+      /* HERO */
+      .hero { padding: 4.5rem 1.25rem 2rem; gap: 1.5rem; }
+      .hero-tag {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.7rem;
+        white-space: normal;
+        text-align: center;
+        justify-content: center;
+        line-height: 1.5;
+      }
+      h1 { font-size: clamp(2rem, 9vw, 2.8rem) !important; }
+      .hero-sub { font-size: 0.95rem; }
+      .hero-ctas { flex-direction: column; gap: 0.75rem; }
+      .hero-ctas a { width: 100%; text-align: center; justify-content: center; }
+
+      /* STATS BAR */
+      .stats-bar { padding: 1.5rem 1rem; }
+      .stats-inner { grid-template-columns: repeat(2, 1fr); gap: 1px; }
+      .stat-number { font-size: 1.6rem !important; }
+      .stat-label { font-size: 0.65rem; }
+
+      /* SECTION WRAP */
+      .section-wrap { padding: 3rem 1.25rem; }
+      .section-title { font-size: clamp(1.5rem, 6vw, 2rem) !important; }
+
+      /* SOBRE MÍ — pasar a 1 columna */
+      #sobre-mi .section-wrap > div[style*="grid-template-columns:1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+      }
+
+      /* SOFÍA — pasar a 1 columna */
+      div[style*="grid-template-columns:1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+      }
+
+      /* SOFIA mockup — ocultar en móvil, ocupa demasiado */
+      div[style*="max-width:400px"] { display: none !important; }
+
+      /* SOFIA módulos — 1 columna */
+      div[style*="grid-template-columns:repeat(3,1fr)"] {
+        grid-template-columns: 1fr !important;
+        gap: 0.75rem !important;
+      }
+
+      /* SOFIA stats — 3 cols (5 items: 3+2) */
+      div[style*="grid-template-columns:repeat(5,1fr)"] {
+        grid-template-columns: repeat(3, 1fr) !important;
+      }
+
+      /* SECTORES grid */
+      #sectores div[style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+      }
+
+      /* STACK grid */
+      .stack-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 0.75rem !important; }
+      .stack-item { padding: 1rem 0.75rem; }
+      .stack-icon { font-size: 1.5rem; }
+      .stack-name { font-size: 0.75rem; }
+
+      /* PROJECT CARDS */
+      .card { padding: 1.5rem; }
+      .card-header { flex-direction: column; gap: 0.5rem; }
+      .card-title { font-size: 1rem; }
+      .workflow { overflow-x: auto; padding-bottom: 0.5rem; }
+      .use-cases { display: none; } /* simplifica en móvil */
+
+      /* CONTACT */
+      .contact-buttons { flex-direction: column; gap: 0.75rem; align-items: stretch; }
+      .btn-contact { justify-content: center; padding: 0.9rem 1rem; font-size: 0.9rem; }
+      .contact-inner { padding: 0 1.25rem; }
+
+      /* FOOTER */
+      footer { font-size: 0.7rem; padding: 1.5rem 1rem; }
+
+      /* SOFIA section interno */
+      #sofia > div { padding: 0 1rem !important; }
+      #sofia h2[style] { font-size: clamp(2.5rem, 12vw, 4rem) !important; }
+      #sofia div[style*="display:grid;grid-template-columns:1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+      }
+      /* SOFIA suite+workflow 2 col */
+      #sofia div[style*="display:grid;grid-template-columns:1fr 1fr;gap:3rem"] {
+        grid-template-columns: 1fr !important;
+      }
+      /* SOFIA pricing — 2 cols en móvil */
+      #sofia div[style*="grid-template-columns:repeat(4"] {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.75rem !important;
+      }
+    }
+
+    /* Pantallas muy pequeñas */
+    @media (max-width: 380px) {
+      .nav-links a[href="#proyectos"] { display: none; }
+      .stats-inner { grid-template-columns: 1fr 1fr; }
+      h1 { font-size: 1.8rem !important; }
+    }
   </style>
 </head>
 <body>
