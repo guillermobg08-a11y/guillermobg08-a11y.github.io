@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOFÍA + SOFIAtrends — Guillermo Bonito</title>
+  <meta name="description" content="SOFÍA: plataforma de auditoría web con 6 agentes de IA en paralelo. SOFIAtrends: extensión para detectar tendencias y generar contenido automáticamente." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #06060f;
+      --purple: #7c6aff;
+      --purple-light: #a78bfa;
+      --blue: #3b82f6;
+      --blue-light: #60a5fa;
+      --green: #10b981;
+      --green-light: #34d399;
+      --text: #e2e8f0;
+      --text-muted: #9090c0;
+      --text-dim: #6868a0;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(124,106,255,0.08) 1px, transparent 0);
+      background-size: 40px 40px;
+      pointer-events: none; z-index: 0;
+      animation: bgDrift 20s ease-in-out infinite alternate;
+    }
+    @keyframes bgDrift { from { background-position: 0 0; } to { background-position: 40px 40px; } }
+
+    nav, main, section, footer { position: relative; z-index: 1; }
+
+    /* NAV */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 64px;
+      background: rgba(6,6,15,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .nav-logo { font-size: 1.1rem; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
+    .nav-logo .accent { color: var(--purple); }
+    .nav-links { display: flex; align-items: center; gap: 1.5rem; }
+    .nav-links a {
+      color: var(--text-muted); text-decoration: none; font-size: 0.88rem;
+      font-weight: 500; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.active { color: var(--purple-light); }
+    .nav-back {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      color: var(--text-muted); text-decoration: none; font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--text); }
+
+    /* FADE UP */
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: none; }
+
+    /* WORKFLOW */
+    .workflow {
+      display: flex; align-items: center; gap: 0;
+      overflow-x: auto; padding: 0.5rem 0;
+    }
+    .wf-node {
+      display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+      border-radius: 10px; padding: 0.55rem 0.7rem; min-width: 64px;
+      border: 1px solid; font-size: 0.6rem; text-align: center;
+      transition: transform 0.2s; cursor: default; flex-shrink: 0;
+    }
+    .wf-node:hover { transform: translateY(-2px); }
+    .wf-icon { font-size: 1.1rem; line-height: 1; }
+    .wf-label { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; color: var(--text-muted); white-space: nowrap; }
+    .wf-arrow { flex: 0 0 18px; height: 2px; background: rgba(255,255,255,0.1); position: relative; margin: 0 2px; }
+    .wf-arrow::after { content: ''; position: absolute; right: -4px; top: -3px; border: 4px solid transparent; border-left-color: rgba(255,255,255,0.2); }
+    .wf-trigger  { background: rgba(245,158,11,0.1);  border-color: rgba(245,158,11,0.3); }
+    .wf-process  { background: rgba(124,106,255,0.1); border-color: rgba(124,106,255,0.3); }
+    .wf-storage  { background: rgba(59,130,246,0.1);  border-color: rgba(59,130,246,0.3); }
+    .wf-output   { background: rgba(16,185,129,0.1);  border-color: rgba(16,185,129,0.3); }
+    .wf-api      { background: rgba(6,182,212,0.1);   border-color: rgba(6,182,212,0.3); }
+    .wf-crm      { background: rgba(245,158,11,0.1);  border-color: rgba(245,158,11,0.3); }
+
+    @keyframes glow-pulse {
+      0%,100% { opacity: 1; box-shadow: 0 0 6px currentColor; }
+      50% { opacity: 0.6; box-shadow: 0 0 12px currentColor; }
+    }
+
+    /* DIVIDER */
+    .section-divider {
+      display: flex; align-items: center; gap: 1.5rem;
+      max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;
+    }
+    .section-divider::before, .section-divider::after {
+      content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06);
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center; padding: 2.5rem 1rem;
+      color: var(--text-dim); font-size: 0.78rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    /* MOBILE */
+    @media (max-width: 640px) {
+      .nav { padding: 0 1rem; }
+      .nav-links { gap: 0.75rem; }
+      .nav-links a.hide-mobile { display: none; }
+      section > div { padding: 0 1rem !important; }
+      .grid-2 { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+      .grid-3 { grid-template-columns: 1fr !important; }
+      .grid-4 { grid-template-columns: 1fr 1fr !important; }
+      .grid-6 { grid-template-columns: repeat(2,1fr) !important; }
+      .hide-mobile { display: none !important; }
+      h2 { font-size: clamp(2.2rem,10vw,3.5rem) !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="index.html" class="nav-back">← Portfolio</a>
+    <span class="nav-logo">GB<span class="accent">.</span></span>
+    <div class="nav-links">
+      <a href="#sofia" class="active">SOFÍA</a>
+      <a href="#sofiatrends" style="color:#60a5fa;">SOFIAtrends</a>
+      <a href="index.html#contacto" class="hide-mobile">Contacto</a>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!--  SOFÍA                                            -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <section id="sofia" style="padding: 8rem 0 5rem; background: linear-gradient(180deg, #06060f 0%, #08061a 40%, #06060f 100%); position: relative; overflow: hidden;">
+    <div style="position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:1100px;height:700px;background:radial-gradient(ellipse,rgba(124,106,255,0.1) 0%,transparent 65%);pointer-events:none;"></div>
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(124,106,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(124,106,255,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+
+    <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;position:relative;z-index:1;">
+
+      <!-- HEADER -->
+      <div class="fade-up" style="margin-bottom:3rem;">
+        <span style="display:inline-flex;align-items:center;gap:0.5rem;font-size:0.7rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#a78bfa;background:rgba(124,106,255,0.12);border:1px solid rgba(124,106,255,0.3);border-radius:100px;padding:0.4rem 1rem;margin-bottom:1.5rem;">
+          <span style="width:6px;height:6px;border-radius:50%;background:#34d399;box-shadow:0 0 8px #34d399;animation:glow-pulse 2s ease infinite;flex-shrink:0;color:#34d399;"></span>
+          Proyecto Flagship · En Producción · 1.200+ webs analizadas
+        </span>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;" class="grid-2">
+          <div>
+            <div style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#7c6aff;margin-bottom:0.75rem;">SaaS · IA Generativa · Auditoría Web</div>
+            <h2 style="font-size:clamp(3rem,6vw,5rem);font-weight:800;letter-spacing:-0.04em;line-height:1;background:linear-gradient(135deg,#fff 0%,#c084fc 45%,#7c6aff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.75rem;">SOFÍA</h2>
+            <p style="font-size:1.15rem;color:#9090c0;line-height:1.6;max-width:440px;">Plataforma que lanza <strong style="color:#e8e8f5;">6 agentes de IA en paralelo</strong> para auditar cualquier web en menos de 60 segundos. SEO, velocidad, seguridad y accesibilidad — todo en un solo informe PDF.</p>
+          </div>
+          <!-- Mockup -->
+          <div style="display:flex;justify-content:center;" class="hide-mobile">
+            <div style="width:100%;max-width:400px;background:rgba(8,8,18,0.95);border:1px solid rgba(124,106,255,0.3);border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(124,106,255,0.25);">
+              <div style="padding:0.8rem 1.1rem;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:0.4rem;">
+                <span style="width:9px;height:9px;border-radius:50%;background:#ff5f57;"></span>
+                <span style="width:9px;height:9px;border-radius:50%;background:#febc2e;"></span>
+                <span style="width:9px;height:9px;border-radius:50%;background:#28c840;"></span>
+                <span style="margin-left:0.6rem;font-size:0.7rem;color:#6868a0;font-family:'JetBrains Mono',monospace;">@AuditorWebIA_bot</span>
+                <span style="margin-left:auto;font-size:0.65rem;color:#34d399;display:flex;align-items:center;gap:0.25rem;"><span style="width:4px;height:4px;border-radius:50%;background:#34d399;"></span>Claude AI</span>
+              </div>
+              <div style="padding:1rem;display:flex;flex-direction:column;gap:0.75rem;font-family:'JetBrains Mono',monospace;">
+                <div style="display:flex;justify-content:flex-end;"><div style="background:linear-gradient(135deg,#7c6aff,#a78bfa);color:#fff;padding:0.5rem 0.9rem;border-radius:12px 12px 3px 12px;font-size:0.75rem;">/auditar miempresa.es</div></div>
+                <div style="display:flex;gap:0.4rem;"><div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#7c6aff,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:0.6rem;flex-shrink:0;">✦</div><div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);padding:0.5rem 0.8rem;border-radius:3px 12px 12px 12px;color:#9090c0;font-size:0.72rem;">Analizando <strong style="color:#a78bfa;">miempresa.es</strong>…</div></div>
+                <div style="background:rgba(124,106,255,0.08);border:1px solid rgba(124,106,255,0.2);border-radius:12px;padding:1rem;margin-left:1.8rem;">
+                  <div style="font-size:0.6rem;color:#6868a0;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem;">Puntuación global</div>
+                  <div style="display:flex;align-items:baseline;gap:0.25rem;margin-bottom:0.75rem;"><span style="font-size:2.5rem;font-weight:800;color:#a78bfa;line-height:1;">76</span><span style="font-size:0.75rem;color:#6868a0;">/100</span></div>
+                  <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:0.3rem;text-align:center;">
+                    <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:0.35rem 0.1rem;"><div style="font-size:0.85rem;font-weight:700;color:#34d399;">82</div><div style="font-size:0.5rem;color:#6868a0;">SEO</div></div>
+                    <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:0.35rem 0.1rem;"><div style="font-size:0.85rem;font-weight:700;color:#fbbf24;">71</div><div style="font-size:0.5rem;color:#6868a0;">Perf</div></div>
+                    <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:0.35rem 0.1rem;"><div style="font-size:0.85rem;font-weight:700;color:#34d399;">90</div><div style="font-size:0.5rem;color:#6868a0;">Seg</div></div>
+                    <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:0.35rem 0.1rem;"><div style="font-size:0.85rem;font-weight:700;color:#60a5fa;">68</div><div style="font-size:0.5rem;color:#6868a0;">Acc</div></div>
+                    <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:0.35rem 0.1rem;"><div style="font-size:0.85rem;font-weight:700;color:#a78bfa;">78</div><div style="font-size:0.5rem;color:#6868a0;">Est</div></div>
+                    <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:0.35rem 0.1rem;"><div style="font-size:0.85rem;font-weight:700;color:#22d3ee;">77</div><div style="font-size:0.5rem;color:#6868a0;">Tot</div></div>
+                  </div>
+                  <div style="margin-top:0.6rem;font-size:0.65rem;color:#34d399;">✓ PDF generado · 3 errores críticos detectados</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="fade-up" style="display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-bottom:4rem;background:rgba(255,255,255,0.05);border-radius:14px;overflow:hidden;border:1px solid rgba(124,106,255,0.12);">
+        <div style="background:#06060f;padding:1.25rem;text-align:center;"><div style="font-size:1.75rem;font-weight:800;color:#a78bfa;">6</div><div style="font-size:0.7rem;color:#6868a0;margin-top:0.2rem;">Agentes IA</div></div>
+        <div style="background:#06060f;padding:1.25rem;text-align:center;"><div style="font-size:1.75rem;font-weight:800;color:#a78bfa;">&lt;60s</div><div style="font-size:0.7rem;color:#6868a0;margin-top:0.2rem;">Por informe</div></div>
+        <div style="background:#06060f;padding:1.25rem;text-align:center;"><div style="font-size:1.75rem;font-weight:800;color:#a78bfa;">1.2k+</div><div style="font-size:0.7rem;color:#6868a0;margin-top:0.2rem;">Webs analizadas</div></div>
+        <div style="background:#06060f;padding:1.25rem;text-align:center;"><div style="font-size:1.75rem;font-weight:800;color:#a78bfa;">+37</div><div style="font-size:0.7rem;color:#6868a0;margin-top:0.2rem;">Pts. mejora media</div></div>
+        <div style="background:#06060f;padding:1.25rem;text-align:center;"><div style="font-size:1.75rem;font-weight:800;color:#a78bfa;">PDF</div><div style="font-size:0.7rem;color:#6868a0;margin-top:0.2rem;">White-label</div></div>
+      </div>
+
+      <!-- 6 AGENTES -->
+      <div class="fade-up" style="margin-bottom:4rem;">
+        <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#7c6aff;margin-bottom:0.5rem;">// equipo de agentes</div>
+        <h3 style="font-size:1.6rem;font-weight:700;color:#e8e8f5;margin-bottom:0.5rem;">6 agentes de IA analizando en paralelo</h3>
+        <p style="color:#6868a0;font-size:0.9rem;margin-bottom:2rem;">Cada agente es especialista en su área. Todos trabajan a la vez, no en secuencia.</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;" class="grid-3">
+          <div style="background:rgba(13,13,26,0.7);border:1px solid rgba(52,211,153,0.2);border-radius:14px;padding:1.4rem;" onmouseover="this.style.borderColor='rgba(52,211,153,0.5)'" onmouseout="this.style.borderColor='rgba(52,211,153,0.2)'">
+            <div style="font-size:1.5rem;margin-bottom:0.75rem;">🔍</div>
+            <div style="font-size:0.95rem;font-weight:700;color:#e8e8f5;margin-bottom:0.4rem;">Agente SEO</div>
+            <div style="font-size:0.8rem;color:#6868a0;line-height:1.6;margin-bottom:0.75rem;">Meta tags, headings, keywords, sitemap, canonicals y Schema.org. Recomendaciones priorizadas por impacto con Claude AI.</div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.3rem;">
+              <span style="font-size:0.6rem;background:rgba(52,211,153,0.1);color:#34d399;border-radius:4px;padding:0.2rem 0.5rem;">Meta tags</span>
+              <span style="font-size:0.6rem;background:rgba(52,211,153,0.1);color:#34d399;border-radius:4px;padding:0.2rem 0.5rem;">H1–H6</span>
+              <span style="font-size:0.6rem;background:rgba(52,211,153,0.1);color:#34d399;border-radius:4px;padding:0.2rem 0.5rem;">Schema.org</span>
+              <span style="font-size:0.6rem;background:rgba(52,211,153,0.1);color:#34d399;border-radius:4px;padding:0.2rem 0.5rem;">Open Graph</span>
+            </div>
+          </div>
+          <div style="background:rgba(13,13,26,0.7);border:1px solid rgba(251,191,36,0.2);border-radius:14px;padding:1.4rem;" onmouseover="this.style.borderColor='rgba(251,191,36,0.5)'" onmouseout="this.style.borderColor='rgba(251,191,36,0.2)'">
+            <div style="font-size:1.5rem;margin-bottom:0.75rem;">⚡</div>
+            <div style="font-size:0.95rem;font-weight:700;color:#e8e8f5;margin-bottom:0.4rem;">Agente Performance</div>
+            <div style="font-size:0.8rem;color:#6868a0;line-height:1.6;margin-bottom:0.75rem;">LCP, CLS, INP y TTFB medidos con la API oficial de Google. +1s de carga = −7% de conversiones.</div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.3rem;">
+              <span style="font-size:0.6rem;background:rgba(251,191,36,0.1);color:#fbbf24;border-radius:4px;padding:0.2rem 0.5rem;">LCP</span>
+              <span style="font-size:0.6rem;background:rgba(251,191,36,0.1);color:#fbbf24;border-radius:4px;padding:0.2rem 0.5rem;">CLS</span>
+              <span style="font-size:0.6rem;background:rgba(251,191,36,0.1);color:#fbbf24;border-radius:4px;padding:0.2rem 0.5rem;">INP</span>
+              <span style="font-size:0.6rem;background:rgba(251,191,36,0.1);color:#fbbf24;border-radius:4px;padding:0.2rem 0.5rem;">TTFB</span>
+            </div>
+          </div>
+          <div style="background:rgba(13,13,26,0.7);border:1px solid rgba(96,165,250,0.2);border-radius:14px;padding:1.4rem;" onmouseover="this.style.borderColor='rgba(96,165,250,0.5)'" onmouseout="this.style.borderColor='rgba(96,165,250,0.2)'">
+            <div style="font-size:1.5rem;margin-bottom:0.75rem;">🔒</div>
+            <div style="font-size:0.95rem;font-weight:700;color:#e8e8f5;margin-bottom:0.4rem;">Agente Seguridad</div>
+            <div style="font-size:0.8rem;color:#6868a0;line-height:1.6;margin-bottom:0.75rem;">HTTPS, SSL, CSP, HSTS, mixed content y detección de vulnerabilidades comunes.</div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.3rem;">
+              <span style="font-size:0.6rem;background:rgba(96,165,250,0.1);color:#60a5fa;border-radius:4px;padding:0.2rem 0.5rem;">HTTPS</span>
+              <span style="font-size:0.6rem;background:rgba(96,165,250,0.1);color:#60a5fa;border-radius:4px;padding:0.2rem 0.5rem;">SSL</span>
+              <span style="font-size:0.6rem;background:rgba(96,165,250,0.1);color:#60a5fa;border-radius:4px;padding:0.2rem 0.5rem;">CSP</span>
+              <span style="font-size:0.6rem;background:rgba(96,165,250,0.1);color:#60a5fa;border-radius:4px;padding:0.2rem 0.5rem;">HSTS</span>
+            </div>
+          </div>
+          <div style="background:rgba(13,13,26,0.7);border:1px solid rgba(167,139,250,0.2);border-radius:14px;padding:1.4rem;" onmouseover="this.style.borderColor='rgba(167,139,250,0.5)'" onmouseout="this.style.borderColor='rgba(167,139,250,0.2)'">
+            <div style="font-size:1.5rem;margin-bottom:0.75rem;">♿</div>
+            <div style="font-size:0.95rem;font-weight:700;color:#e8e8f5;margin-bottom:0.4rem;">Agente Accesibilidad</div>
+            <div style="font-size:0.8rem;color:#6868a0;line-height:1.6;margin-bottom:0.75rem;">WCAG 2.1: contraste, alt texts, roles ARIA y navegación por teclado. Cumplimiento legal en España.</div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.3rem;">
+              <span style="font-size:0.6rem;background:rgba(167,139,250,0.1);color:#a78bfa;border-radius:4px;padding:0.2rem 0.5rem;">WCAG 2.1</span>
+              <span style="font-size:0.6rem;background:rgba(167,139,250,0.1);color:#a78bfa;border-radius:4px;padding:0.2rem 0.5rem;">ARIA</span>
+              <span style="font-size:0.6rem;background:rgba(167,139,250,0.1);color:#a78bfa;border-radius:4px;padding:0.2rem 0.5rem;">Contraste</span>
+            </div>
+          </div>
+          <div style="background:rgba(13,13,26,0.7);border:1px solid rgba(34,211,238,0.2);border-radius:14px;padding:1.4rem;" onmouseover="this.style.borderColor='rgba(34,211,238,0.5)'" onmouseout="this.style.borderColor='rgba(34,211,238,0.2)'">
+            <div style="font-size:1.5rem;margin-bottom:0.75rem;">🏗️</div>
+            <div style="font-size:0.95rem;font-weight:700;color:#e8e8f5;margin-bottom:0.4rem;">Agente Estructura</div>
+            <div style="font-size:0.8rem;color:#6868a0;line-height:1.6;margin-bottom:0.75rem;">Jerarquía de páginas, calidad del contenido, enlaces internos y coherencia de la información publicada.</div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.3rem;">
+              <span style="font-size:0.6rem;background:rgba(34,211,238,0.1);color:#22d3ee;border-radius:4px;padding:0.2rem 0.5rem;">Arquitectura</span>
+              <span style="font-size:0.6rem;background:rgba(34,211,238,0.1);color:#22d3ee;border-radius:4px;padding:0.2rem 0.5rem;">Links internos</span>
+            </div>
+          </div>
+          <div style="background:rgba(13,13,26,0.7);border:1px solid rgba(248,113,113,0.2);border-radius:14px;padding:1.4rem;" onmouseover="this.style.borderColor='rgba(248,113,113,0.5)'" onmouseout="this.style.borderColor='rgba(248,113,113,0.2)'">
+            <div style="font-size:1.5rem;margin-bottom:0.75rem;">🏆</div>
+            <div style="font-size:0.95rem;font-weight:700;color:#e8e8f5;margin-bottom:0.4rem;">Agente Competencia</div>
+            <div style="font-size:0.8rem;color:#6868a0;line-height:1.6;margin-bottom:0.75rem;">Benchmark comparativo contra competidores directos para identificar brechas y oportunidades de mejora.</div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.3rem;">
+              <span style="font-size:0.6rem;background:rgba(248,113,113,0.1);color:#f87171;border-radius:4px;padding:0.2rem 0.5rem;">Benchmark</span>
+              <span style="font-size:0.6rem;background:rgba(248,113,113,0.1);color:#f87171;border-radius:4px;padding:0.2rem 0.5rem;">Brechas</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FLUJO + SUITE -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;margin-bottom:4rem;" class="fade-up grid-2">
+        <div>
+          <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#7c6aff;margin-bottom:0.5rem;">// flujo de trabajo</div>
+          <h3 style="font-size:1.3rem;font-weight:700;color:#e8e8f5;margin-bottom:1.5rem;">De URL a informe en 3 pasos</h3>
+          <div style="display:flex;flex-direction:column;gap:1rem;">
+            <div style="display:flex;gap:1rem;align-items:flex-start;"><div style="width:32px;height:32px;border-radius:50%;background:rgba(124,106,255,0.15);border:1px solid rgba(124,106,255,0.3);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#a78bfa;flex-shrink:0;">01</div><div><div style="font-size:0.9rem;font-weight:600;color:#e8e8f5;margin-bottom:0.2rem;">Pega tu URL</div><div style="font-size:0.8rem;color:#6868a0;">Sin registro, sin contraseña. Solo la URL.</div></div></div>
+            <div style="display:flex;gap:1rem;align-items:flex-start;"><div style="width:32px;height:32px;border-radius:50%;background:rgba(124,106,255,0.15);border:1px solid rgba(124,106,255,0.3);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#a78bfa;flex-shrink:0;">02</div><div><div style="font-size:0.9rem;font-weight:600;color:#e8e8f5;margin-bottom:0.2rem;">SOFÍA analiza con IA</div><div style="font-size:0.8rem;color:#6868a0;">6 agentes en paralelo: SEO, velocidad, seguridad, accesibilidad, estructura y competencia.</div></div></div>
+            <div style="display:flex;gap:1rem;align-items:flex-start;"><div style="width:32px;height:32px;border-radius:50%;background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.3);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#34d399;flex-shrink:0;">03</div><div><div style="font-size:0.9rem;font-weight:600;color:#e8e8f5;margin-bottom:0.2rem;">Lee y comparte tu informe</div><div style="font-size:0.8rem;color:#6868a0;">Score 0–100, errores priorizados, recomendaciones IA y PDF descargable.</div></div></div>
+          </div>
+          <div style="margin-top:1.5rem;">
+            <div style="font-size:0.65rem;color:#6868a0;margin-bottom:0.5rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;">Diagrama de flujo</div>
+            <div class="workflow">
+              <div class="wf-node wf-trigger"><div class="wf-icon">🌐</div><div class="wf-label">URL</div></div>
+              <div class="wf-arrow"></div>
+              <div class="wf-node wf-api"><div class="wf-icon">✦</div><div class="wf-label">6 Agentes</div></div>
+              <div class="wf-arrow"></div>
+              <div class="wf-node wf-process"><div class="wf-icon">🔍</div><div class="wf-label">SEO</div></div>
+              <div class="wf-arrow"></div>
+              <div class="wf-node wf-process"><div class="wf-icon">⚡</div><div class="wf-label">Vitals</div></div>
+              <div class="wf-arrow"></div>
+              <div class="wf-node wf-storage"><div class="wf-icon">📊</div><div class="wf-label">Score</div></div>
+              <div class="wf-arrow"></div>
+              <div class="wf-node wf-output"><div class="wf-icon">📄</div><div class="wf-label">PDF</div></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#7c6aff;margin-bottom:0.5rem;">// planes</div>
+          <h3 style="font-size:1.3rem;font-weight:700;color:#e8e8f5;margin-bottom:1.5rem;">Empieza gratis. Escala cuando lo necesites.</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;" class="grid-2">
+            <div style="background:rgba(13,13,26,0.7);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:1.1rem;">
+              <div style="font-size:0.7rem;font-weight:700;color:#6868a0;margin-bottom:0.4rem;">GRATIS</div>
+              <div style="font-size:1.6rem;font-weight:800;color:#e8e8f5;margin-bottom:0.2rem;">0€</div>
+              <ul style="list-style:none;font-size:0.72rem;color:#9090c0;display:flex;flex-direction:column;gap:0.3rem;margin-top:0.7rem;">
+                <li>✓ 1 auditoría completa</li><li>✓ PDF informe</li><li>✓ 6 módulos IA</li>
+              </ul>
+            </div>
+            <div style="background:rgba(13,13,26,0.7);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:1.1rem;">
+              <div style="font-size:0.7rem;font-weight:700;color:#6868a0;margin-bottom:0.4rem;">STARTER</div>
+              <div style="font-size:1.6rem;font-weight:800;color:#e8e8f5;margin-bottom:0.2rem;">29€<span style="font-size:0.8rem;font-weight:400;color:#6868a0;">/mes</span></div>
+              <ul style="list-style:none;font-size:0.72rem;color:#9090c0;display:flex;flex-direction:column;gap:0.3rem;margin-top:0.7rem;">
+                <li>✓ 20 auditorías/mes</li><li>✓ PDF branded</li><li>✓ Historial 90 días</li>
+              </ul>
+            </div>
+            <div style="background:rgba(124,106,255,0.08);border:1px solid rgba(124,106,255,0.4);border-radius:12px;padding:1.1rem;position:relative;">
+              <div style="position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-size:0.55rem;font-weight:700;background:#7c6aff;color:#fff;padding:0.15rem 0.6rem;border-radius:100px;white-space:nowrap;">POPULAR</div>
+              <div style="font-size:0.7rem;font-weight:700;color:#a78bfa;margin-bottom:0.4rem;">PRO</div>
+              <div style="font-size:1.6rem;font-weight:800;color:#e8e8f5;margin-bottom:0.2rem;">69€<span style="font-size:0.8rem;font-weight:400;color:#6868a0;">/mes</span></div>
+              <ul style="list-style:none;font-size:0.72rem;color:#9090c0;display:flex;flex-direction:column;gap:0.3rem;margin-top:0.7rem;">
+                <li>✓ 100 auditorías/mes</li><li>✓ Monitoreo semanal</li><li>✓ Alertas automáticas</li>
+              </ul>
+            </div>
+            <div style="background:rgba(13,13,26,0.7);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:1.1rem;">
+              <div style="font-size:0.7rem;font-weight:700;color:#6868a0;margin-bottom:0.4rem;">AGENCIA</div>
+              <div style="font-size:1.6rem;font-weight:800;color:#e8e8f5;margin-bottom:0.2rem;">149€<span style="font-size:0.8rem;font-weight:400;color:#6868a0;">/mes</span></div>
+              <ul style="list-style:none;font-size:0.72rem;color:#9090c0;display:flex;flex-direction:column;gap:0.3rem;margin-top:0.7rem;">
+                <li>✓ Ilimitadas</li><li>✓ PDF white-label</li><li>✓ Multi-cliente</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTAs SOFIA -->
+      <div class="fade-up" style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;justify-content:center;">
+        <a href="index.html#contacto" style="display:inline-flex;align-items:center;gap:0.5rem;background:linear-gradient(135deg,#7c6aff,#a78bfa);color:#fff;padding:0.9rem 2rem;border-radius:10px;font-weight:700;font-size:1rem;text-decoration:none;">Solicitar demo →</a>
+        <a href="https://t.me/AuditorWebIA_bot" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.5rem;border:1px solid rgba(124,106,255,0.35);color:#a78bfa;padding:0.9rem 2rem;border-radius:10px;font-weight:600;font-size:1rem;text-decoration:none;">🤖 Probar en Telegram</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!--  TRANSICIÓN → SOFIAtrends                        -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div style="padding: 4rem 0 2rem; background: linear-gradient(180deg, #06060f 0%, #07091a 100%); position:relative; z-index:1;">
+    <div class="section-divider fade-up">
+      <span style="font-size:0.7rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#6868a0;white-space:nowrap;">Presentamos la extensión</span>
+    </div>
+    <div style="text-align:center;margin-top:2rem;" class="fade-up">
+      <p style="font-size:0.85rem;color:#6868a0;max-width:500px;margin:0 auto;">SOFÍA no solo audita — también detecta tendencias y genera contenido para que tu web crezca semana tras semana.</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!--  SOFIAtrends                                      -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <section id="sofiatrends" style="padding: 3rem 0 6rem; background: linear-gradient(180deg, #07091a 0%, #06060f 100%); position: relative; overflow: hidden;">
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(96,165,250,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(96,165,250,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;"></div>
+    <div style="position:absolute;top:20%;left:50%;transform:translate(-50%,-50%);width:900px;height:600px;background:radial-gradient(ellipse,rgba(96,165,250,0.06) 0%,transparent 65%);pointer-events:none;"></div>
+    <!-- Sphere SVG -->
+    <svg style="position:absolute;right:-60px;top:40%;transform:translateY(-50%);width:420px;height:420px;opacity:0.07;pointer-events:none;" viewBox="-1 -1 2 2" xmlns="http://www.w3.org/2000/svg">
+      <g stroke="#60a5fa" stroke-width="0.013" fill="none">
+        <ellipse cx="0" cy="0" rx="1" ry="0.28"/><ellipse cx="0" cy="0" rx="1" ry="0.52"/><ellipse cx="0" cy="0" rx="1" ry="0.72"/><ellipse cx="0" cy="0" rx="1" ry="0.88"/>
+        <ellipse cx="0" cy="0" rx="0.28" ry="1" transform="rotate(90)"/><ellipse cx="0" cy="0" rx="0.52" ry="1" transform="rotate(90)"/><ellipse cx="0" cy="0" rx="0.72" ry="1" transform="rotate(90)"/><ellipse cx="0" cy="0" rx="0.88" ry="1" transform="rotate(90)"/>
+        <ellipse cx="0" cy="0" rx="1" ry="0.38" transform="rotate(45)"/><ellipse cx="0" cy="0" rx="1" ry="0.38" transform="rotate(-45)"/>
+        <circle cx="0" cy="0" r="1"/><line x1="-1" y1="0" x2="1" y2="0"/><line x1="0" y1="-1" x2="0" y2="1"/>
+        <line x1="-0.71" y1="-0.71" x2="0.71" y2="0.71"/><line x1="0.71" y1="-0.71" x2="-0.71" y2="0.71"/>
+      </g>
+      <g fill="#60a5fa" opacity="0.9"><circle cx="0" cy="-1" r="0.028"/><circle cx="0" cy="1" r="0.028"/><circle cx="-1" cy="0" r="0.028"/><circle cx="1" cy="0" r="0.028"/></g>
+    </svg>
+
+    <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;position:relative;z-index:1;">
+
+      <!-- HEADER -->
+      <div class="fade-up" style="text-align:center;margin-bottom:3.5rem;">
+        <span style="display:inline-flex;align-items:center;gap:0.5rem;font-size:0.7rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#60a5fa;background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.25);border-radius:100px;padding:0.4rem 1rem;margin-bottom:1.5rem;">
+          <span style="width:6px;height:6px;border-radius:50%;background:#60a5fa;box-shadow:0 0 8px #60a5fa;animation:glow-pulse 2s ease infinite;flex-shrink:0;color:#60a5fa;"></span>
+          Extensión de SOFIA · VisualDrop Group 001
+        </span>
+        <h2 style="font-size:clamp(3rem,6vw,5rem);font-weight:800;letter-spacing:-0.04em;line-height:1;margin-bottom:1rem;">
+          <span style="background:linear-gradient(135deg,#fff 0%,#93c5fd 45%,#3b82f6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">SOFIA</span><span style="font-style:italic;font-weight:300;font-family:Georgia,'Times New Roman',serif;color:#60a5fa;-webkit-text-fill-color:#60a5fa;font-size:0.55em;letter-spacing:0.03em;">trends</span>
+        </h2>
+        <p style="font-size:1.1rem;color:#9090c0;max-width:580px;margin:0 auto 2rem;line-height:1.6;">Ayudamos a <strong style="color:#e8e8f5;">potenciar el alcance de tu página web</strong> — detecta tendencias antes que tu competencia y publica contenido ganador en minutos.</p>
+        <div style="display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;">
+          <span style="display:flex;align-items:center;gap:0.5rem;color:#9090c0;font-size:0.88rem;"><span style="color:#60a5fa;">⚡</span> Aumenta tu eficiencia</span>
+          <span style="display:flex;align-items:center;gap:0.5rem;color:#9090c0;font-size:0.88rem;"><span style="color:#60a5fa;">✍️</span> Crea contenido ganador en minutos</span>
+          <span style="display:flex;align-items:center;gap:0.5rem;color:#9090c0;font-size:0.88rem;"><span style="color:#60a5fa;">🚀</span> Publica antes que tu competencia</span>
+        </div>
+      </div>
+
+      <!-- FLUJO 6 PASOS -->
+      <div class="fade-up" style="margin-bottom:4rem;">
+        <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#60a5fa;margin-bottom:0.5rem;">// cómo funciona</div>
+        <h3 style="font-size:1.3rem;font-weight:700;color:#e8e8f5;margin-bottom:0.4rem;">De tu web al artículo publicado — de forma automática</h3>
+        <p style="font-size:0.85rem;color:#6868a0;margin-bottom:2rem;">Cada lunes, SOFIA trabaja. Tú publicas.</p>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:0.75rem;" class="grid-6">
+          <div style="background:rgba(10,14,30,0.9);border:1px solid rgba(96,165,250,0.2);border-radius:12px;padding:1.1rem 0.8rem;text-align:center;"><div style="font-size:1.3rem;margin-bottom:0.5rem;">🔗</div><div style="font-size:0.7rem;font-weight:700;color:#60a5fa;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.4rem;">Conexión</div><div style="font-size:0.7rem;color:#6868a0;line-height:1.5;">Lee tu web, detecta tu nicho y entiende tu audiencia</div></div>
+          <div style="background:rgba(10,14,30,0.9);border:1px solid rgba(96,165,250,0.2);border-radius:12px;padding:1.1rem 0.8rem;text-align:center;"><div style="font-size:1.3rem;margin-bottom:0.5rem;">🧬</div><div style="font-size:0.7rem;font-weight:700;color:#60a5fa;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.4rem;">Analiza</div><div style="font-size:0.7rem;color:#6868a0;line-height:1.5;">Construye el ADN de tu nicho y mapea tu competencia</div></div>
+          <div style="background:rgba(10,14,30,0.9);border:1px solid rgba(96,165,250,0.2);border-radius:12px;padding:1.1rem 0.8rem;text-align:center;"><div style="font-size:1.3rem;margin-bottom:0.5rem;">🌐</div><div style="font-size:0.7rem;font-weight:700;color:#60a5fa;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.4rem;">Escanea</div><div style="font-size:0.7rem;color:#6868a0;line-height:1.5;">Rastrea webs, redes, foros y noticias en tiempo real</div></div>
+          <div style="background:rgba(10,14,30,0.9);border:1px solid rgba(96,165,250,0.35);border-radius:12px;padding:1.1rem 0.8rem;text-align:center;box-shadow:0 0 20px rgba(96,165,250,0.1);"><div style="font-size:1.3rem;margin-bottom:0.5rem;">🎯</div><div style="font-size:0.7rem;font-weight:700;color:#93c5fd;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.4rem;">Decide</div><div style="font-size:0.7rem;color:#6868a0;line-height:1.5;">Rankea tendencias por impacto. Predice qué explotará</div></div>
+          <div style="background:rgba(10,14,30,0.9);border:1px solid rgba(96,165,250,0.2);border-radius:12px;padding:1.1rem 0.8rem;text-align:center;"><div style="font-size:1.3rem;margin-bottom:0.5rem;">✍️</div><div style="font-size:0.7rem;font-weight:700;color:#60a5fa;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.4rem;">Genera</div><div style="font-size:0.7rem;color:#6868a0;line-height:1.5;">Convierte tendencias en artículos listos para publicar</div></div>
+          <div style="background:rgba(10,14,30,0.9);border:1px solid rgba(52,211,153,0.3);border-radius:12px;padding:1.1rem 0.8rem;text-align:center;"><div style="font-size:1.3rem;margin-bottom:0.5rem;">📬</div><div style="font-size:0.7rem;font-weight:700;color:#34d399;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.4rem;">Entrega</div><div style="font-size:0.7rem;color:#6868a0;line-height:1.5;">Cada lunes en tu bandeja de entrada</div></div>
+        </div>
+        <div class="workflow" style="padding:1.5rem 0 0.5rem;flex-wrap:wrap;gap:0.4rem;">
+          <div class="wf-node wf-trigger"><div class="wf-icon">🔗</div><div class="wf-label">Conexión</div></div><div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">🧬</div><div class="wf-label">ADN Nicho</div></div><div class="wf-arrow"></div>
+          <div class="wf-node wf-api"><div class="wf-icon">🌐</div><div class="wf-label">Scraper</div></div><div class="wf-arrow"></div>
+          <div class="wf-node wf-api"><div class="wf-icon">📱</div><div class="wf-label">RRSS</div></div><div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">🎯</div><div class="wf-label">Ranker IA</div></div><div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">✍️</div><div class="wf-label">Generador</div></div><div class="wf-arrow"></div>
+          <div class="wf-node wf-process"><div class="wf-icon">🔍</div><div class="wf-label">SEO Score</div></div><div class="wf-arrow"></div>
+          <div class="wf-node wf-output"><div class="wf-icon">📬</div><div class="wf-label">Gmail</div></div>
+        </div>
+      </div>
+
+      <!-- 13 AGENTES -->
+      <div class="fade-up" style="margin-bottom:4rem;">
+        <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#60a5fa;margin-bottom:0.5rem;">// equipo de 13 agentes premium</div>
+        <h3 style="font-size:1.3rem;font-weight:700;color:#e8e8f5;margin-bottom:2rem;">Tres formaciones trabajando en paralelo</h3>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;" class="grid-3">
+          <div style="background:rgba(10,14,30,0.7);border:1px solid rgba(96,165,250,0.18);border-radius:14px;padding:1.4rem;">
+            <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#60a5fa;margin-bottom:1rem;padding-bottom:0.6rem;border-bottom:1px solid rgba(96,165,250,0.12);">⬡ Formación de Entrada</div>
+            <div style="display:flex;flex-direction:column;gap:0.6rem;">
+              <div style="display:flex;gap:0.6rem;"><span style="color:#60a5fa;flex-shrink:0;">·</span><div><div style="font-size:0.8rem;font-weight:600;color:#e8e8f5;">Agente Conector</div><div style="font-size:0.72rem;color:#6868a0;">Vincula tus webs, lee contenido y construye perfil por sitio</div></div></div>
+              <div style="display:flex;gap:0.6rem;"><span style="color:#60a5fa;flex-shrink:0;">·</span><div><div style="font-size:0.8rem;font-weight:600;color:#e8e8f5;">Agente Analista de Nicho</div><div style="font-size:0.72rem;color:#6868a0;">Detecta categorías, audiencia y competidores automáticamente</div></div></div>
+              <div style="display:flex;gap:0.6rem;"><span style="color:#60a5fa;flex-shrink:0;">·</span><div><div style="font-size:0.8rem;font-weight:600;color:#e8e8f5;">Agente Scraper Web</div><div style="font-size:0.72rem;color:#6868a0;">Rastrea blogs, foros, competencia y Google Trends en tiempo real</div></div></div>
+              <div style="display:flex;gap:0.6rem;"><span style="color:#60a5fa;flex-shrink:0;">·</span><div><div style="font-size:0.8rem;font-weight:600;color:#e8e8f5;">Agente Scraper de RRSS</div><div style="font-size:0.72rem;color:#6868a0;">Monitoriza TikTok, X, Instagram, YouTube y LinkedIn por idioma y región</div></div></div>
+            </div>
+          </div>
+          <div style="background:rgba(10,14,30,0.7);border:1px solid rgba(96,165,250,0.18);border-radius:14px;padding:1.4rem;">
+            <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#60a5fa;margin-bottom:1rem;padding-bottom:0.6rem;border-bottom:1px solid rgba(96,165,250,0.12);">⬡ Formación de Inteligencia</div>
+            <div style="display:flex;flex-direction:column;gap:0.6rem;">
+              <div style="display:flex;gap:0.6rem;"><span style="color:#60a5fa;flex-shrink:0;">·</span><div><div style="font-size:0.8rem;font-weight:600;color:#e8e8f5;">Agente Ranker</div><div style="font-size:0.72rem;color:#6868a0;">Puntúa tendencias por volumen, velocidad y saturación</div></div></div>
+              <div style="display:flex;gap:0.6rem;"><span style="color:#60a5fa;flex-shrink:0;">·</span><div><div style="font-size:0.8rem;font-weight:600;color:#e8e8f5;">Agente Vigilante</div><div style="font-size:0.72rem;color:#6868a0;">Monitoriza tendencias no maduras y alerta cuando explotan</div></div></div>
+              <div style="display:flex;gap:0.6rem;"><span style="color:#60a5fa;flex-shrink:0;">·</span><div><div style="font-size:0.8rem;font-weight:600;color:#e8e8f5;">Agente de Idioma y Región</div><div style="font-size:0.72rem;color:#6868a0;">Filtra por idioma y geografía — España no es México ni Argentina</div></div></div>
+            </div>
+          </div>
+          <div style="background:rgba(10,14,30,0.7);border:1px solid rgba(96,165,250,0.18);border-radius:14px;padding:1.4rem;">
+            <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#60a5fa;margin-bottom:1rem;padding-bottom:0.6rem;border-bottom:1px solid rgba(96,165,250,0.12);">⬡ Formación de Creación</div>
+            <div style="display:flex;flex-direction:column;gap:0.6rem;">
+              <div style="display:flex;gap:0.6rem;"><span style="color:#60a5fa;flex-shrink:0;">·</span><div><div style="font-size:0.8rem;font-weight:600;color:#e8e8f5;">Agente de Ángulos</div><div style="font-size:0.72rem;color:#6868a0;">Sugiere títulos ganadores, formato ideal y keywords long tail</div></div></div>
+              <div style="display:flex;gap:0.6rem;"><span style="color:#60a5fa;flex-shrink:0;">·</span><div><div style="font-size:0.8rem;font-weight:600;color:#e8e8f5;">Agente Generador</div><div style="font-size:0.72rem;color:#6868a0;">Crea el artículo completo con SEO optimizado y tono de marca</div></div></div>
+              <div style="display:flex;gap:0.6rem;"><span style="color:#60a5fa;flex-shrink:0;">·</span><div><div style="font-size:0.8rem;font-weight:600;color:#e8e8f5;">IA Auditora de Estilo</div><div style="font-size:0.72rem;color:#6868a0;">Aprende tu voz editorial. Cada artículo se parece más a ti</div></div></div>
+              <div style="display:flex;gap:0.6rem;"><span style="color:#60a5fa;flex-shrink:0;">·</span><div><div style="font-size:0.8rem;font-weight:600;color:#e8e8f5;">Agente Optimizador SEO</div><div style="font-size:0.72rem;color:#6868a0;">Score SEO en tiempo real frente a los mejores artículos del nicho</div></div></div>
+              <div style="display:flex;gap:0.6rem;"><span style="color:#60a5fa;flex-shrink:0;">·</span><div><div style="font-size:0.8rem;font-weight:600;color:#e8e8f5;">Agente Calendario</div><div style="font-size:0.72rem;color:#6868a0;">Fecha y hora óptima de publicación por tendencia</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTADOS + PLANES -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;margin-bottom:3rem;" class="fade-up grid-2">
+        <div>
+          <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#60a5fa;margin-bottom:0.5rem;">// resultados reales</div>
+          <h3 style="font-size:1.3rem;font-weight:700;color:#e8e8f5;margin-bottom:1.5rem;">El sistema mejora semana tras semana</h3>
+          <div style="display:flex;flex-direction:column;gap:1rem;">
+            <div style="background:rgba(10,14,30,0.7);border:1px solid rgba(96,165,250,0.15);border-radius:12px;padding:1.1rem 1.25rem;display:flex;align-items:center;gap:1.2rem;"><div style="font-size:2rem;font-weight:800;color:#60a5fa;line-height:1;flex-shrink:0;">+47%</div><div><div style="font-size:0.85rem;font-weight:600;color:#e8e8f5;">Tráfico orgánico</div><div style="font-size:0.75rem;color:#6868a0;">Más visibilidad en buscadores</div></div></div>
+            <div style="background:rgba(10,14,30,0.7);border:1px solid rgba(96,165,250,0.15);border-radius:12px;padding:1.1rem 1.25rem;display:flex;align-items:center;gap:1.2rem;"><div style="font-size:2rem;font-weight:800;color:#60a5fa;line-height:1;flex-shrink:0;">3x</div><div><div style="font-size:0.85rem;font-weight:600;color:#e8e8f5;">Más artículos publicados</div><div style="font-size:0.75rem;color:#6868a0;">Con el mismo esfuerzo de siempre</div></div></div>
+            <div style="background:rgba(10,14,30,0.7);border:1px solid rgba(96,165,250,0.15);border-radius:12px;padding:1.1rem 1.25rem;display:flex;align-items:center;gap:1.2rem;"><div style="font-size:2rem;font-weight:800;color:#34d399;line-height:1;flex-shrink:0;">-80%</div><div><div style="font-size:0.85rem;font-weight:600;color:#e8e8f5;">Tiempo de investigación</div><div style="font-size:0.75rem;color:#6868a0;">SOFIA rastrea, tú creas</div></div></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#60a5fa;margin-bottom:0.5rem;">// planes SOFIAtrends</div>
+          <h3 style="font-size:1.3rem;font-weight:700;color:#e8e8f5;margin-bottom:1.5rem;">Empieza con lo que necesitas</h3>
+          <div style="display:flex;flex-direction:column;gap:0.6rem;">
+            <div style="background:rgba(10,14,30,0.7);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:0.85rem 1rem;display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:0.8rem;font-weight:700;color:#e8e8f5;">Starter</div><div style="font-size:0.7rem;color:#6868a0;">4 artículos/mes · 1 web · Autopilot</div></div><div style="font-size:1rem;font-weight:800;color:#60a5fa;">29€<span style="font-size:0.7rem;font-weight:400;color:#6868a0;">/mes</span></div></div>
+            <div style="background:rgba(96,165,250,0.07);border:1px solid rgba(96,165,250,0.35);border-radius:10px;padding:0.85rem 1rem;display:flex;justify-content:space-between;align-items:center;position:relative;"><div style="position:absolute;top:-9px;right:12px;font-size:0.55rem;font-weight:700;background:#3b82f6;color:#fff;padding:0.15rem 0.6rem;border-radius:100px;">POPULAR</div><div><div style="font-size:0.8rem;font-weight:700;color:#e8e8f5;">Pro</div><div style="font-size:0.7rem;color:#6868a0;">12 artículos/mes · 3 webs · 13 agentes</div></div><div style="font-size:1rem;font-weight:800;color:#60a5fa;">79€<span style="font-size:0.7rem;font-weight:400;color:#6868a0;">/mes</span></div></div>
+            <div style="background:rgba(10,14,30,0.7);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:0.85rem 1rem;display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:0.8rem;font-weight:700;color:#e8e8f5;">Agency</div><div style="font-size:0.7rem;color:#6868a0;">30 artículos/mes · Ilimitados · API</div></div><div style="font-size:1rem;font-weight:800;color:#60a5fa;">199€<span style="font-size:0.7rem;font-weight:400;color:#6868a0;">/mes</span></div></div>
+            <div style="background:rgba(10,14,30,0.7);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:0.85rem 1rem;display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:0.8rem;font-weight:700;color:#e8e8f5;">Enterprise</div><div style="font-size:0.7rem;color:#6868a0;">Ilimitado · API completa + SLA + Onboarding</div></div><div style="font-size:1rem;font-weight:800;color:#60a5fa;">499€+<span style="font-size:0.7rem;font-weight:400;color:#6868a0;">/mes</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTAs -->
+      <div class="fade-up" style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;justify-content:center;padding-top:0.5rem;">
+        <a href="index.html#contacto" style="display:inline-flex;align-items:center;gap:0.5rem;background:linear-gradient(135deg,#3b82f6,#60a5fa);color:#fff;padding:0.9rem 2rem;border-radius:10px;font-weight:700;font-size:1rem;text-decoration:none;">Solicitar demo →</a>
+        <a href="https://wa.me/34671030429" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.5rem;border:1px solid rgba(96,165,250,0.35);color:#60a5fa;padding:0.9rem 2rem;border-radius:10px;font-weight:600;font-size:1rem;text-decoration:none;">💬 Hablar por WhatsApp</a>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Guillermo Bonito Guerrero · <a href="index.html">← Volver al portfolio</a></p>
+  </footer>
+
+  <script>
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
