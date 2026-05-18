@@ -1819,6 +1819,187 @@
           </div>
         </div>
 
+        <!-- 11. Generador de Propuestas PDF -->
+        <div class="card fade-up">
+          <div class="card-header">
+            <div class="card-icon-title">
+              <div class="card-icon">📄</div>
+              <div>
+                <div class="card-title">Generador de Propuestas PDF</div>
+                <div class="card-tags">
+                  <span class="tag tag-purple">Python</span>
+                  <span class="tag tag-cyan">Jinja2</span>
+                  <span class="tag tag-blue">WeasyPrint</span>
+                  <span class="tag tag-amber">Telegram</span>
+                </div>
+              </div>
+            </div>
+            <span class="status-badge" style="background:rgba(139,92,246,0.12);color:#a78bfa;border:1px solid rgba(139,92,246,0.25);">Concepto</span>
+          </div>
+          <p class="card-desc">Genera propuestas comerciales personalizadas en PDF a partir de una plantilla HTML con Jinja2. El comercial envía un comando por Telegram con el nombre del cliente y el servicio, y en segundos recibe el PDF listo para adjuntar — con logo, colores de marca, precios y condiciones ya rellenados.</p>
+          <div class="workflow">
+            <div class="wf-node wf-trigger">
+              <div class="wf-icon">🤖</div>
+              <div class="wf-label">Telegram Trigger</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-storage">
+              <div class="wf-icon">🗄️</div>
+              <div class="wf-label">Cliente DB</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">📝</div>
+              <div class="wf-label">Jinja2 Engine</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">🖨️</div>
+              <div class="wf-label">PDF Builder</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-output">
+              <div class="wf-icon">📄</div>
+              <div class="wf-label">PDF → Telegram</div>
+            </div>
+          </div>
+          <div class="use-cases">
+            <div class="use-cases-title">Casos de uso</div>
+            <ul>
+              <li>Equipos comerciales que envían propuestas en segundos desde el móvil</li>
+              <li>Freelancers que quieren propuestas profesionales sin abrir Word</li>
+              <li>Agencias que mantienen coherencia de marca en todos los documentos</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <span class="status-badge" style="background:rgba(139,92,246,0.12);color:#a78bfa;border:1px solid rgba(139,92,246,0.25);">Concepto</span>
+          </div>
+        </div>
+
+        <!-- 12. Monitor de Menciones -->
+        <div class="card fade-up">
+          <div class="card-header">
+            <div class="card-icon-title">
+              <div class="card-icon">🔔</div>
+              <div>
+                <div class="card-title">Monitor de Menciones</div>
+                <div class="card-tags">
+                  <span class="tag tag-purple">Python</span>
+                  <span class="tag tag-cyan">Google News RSS</span>
+                  <span class="tag tag-blue">Playwright</span>
+                  <span class="tag tag-amber">Telegram</span>
+                </div>
+              </div>
+            </div>
+            <span class="status-badge" style="background:rgba(139,92,246,0.12);color:#a78bfa;border:1px solid rgba(139,92,246,0.25);">Concepto</span>
+          </div>
+          <p class="card-desc">Rastrea menciones de una marca, keyword o persona en Google News RSS, X (Twitter) e Instagram cada 6 horas. Filtra por idioma y elimina duplicados. Cuando detecta una mención nueva, envía un resumen por Telegram con el titular, fuente, sentimiento estimado y enlace directo.</p>
+          <div class="workflow">
+            <div class="wf-node wf-trigger">
+              <div class="wf-icon">⏰</div>
+              <div class="wf-label">Scheduler (6h)</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-api">
+              <div class="wf-icon">📰</div>
+              <div class="wf-label">Google News RSS</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-api">
+              <div class="wf-icon">🐦</div>
+              <div class="wf-label">X / Instagram</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">🔄</div>
+              <div class="wf-label">Dedup Filter</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">🧠</div>
+              <div class="wf-label">Sentiment</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-output">
+              <div class="wf-icon">📱</div>
+              <div class="wf-label">Telegram Alert</div>
+            </div>
+          </div>
+          <div class="use-cases">
+            <div class="use-cases-title">Casos de uso</div>
+            <ul>
+              <li>Marcas que quieren saber qué dice internet de ellas en tiempo real</li>
+              <li>Agencias de reputación que gestionan múltiples clientes</li>
+              <li>Emprendedores que monitorizan a su competencia por keyword</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <span class="status-badge" style="background:rgba(139,92,246,0.12);color:#a78bfa;border:1px solid rgba(139,92,246,0.25);">Concepto</span>
+          </div>
+        </div>
+
+        <!-- 13. Facturación Automática -->
+        <div class="card fade-up">
+          <div class="card-header">
+            <div class="card-icon-title">
+              <div class="card-icon">🧾</div>
+              <div>
+                <div class="card-title">Facturación Automática</div>
+                <div class="card-tags">
+                  <span class="tag tag-purple">Python</span>
+                  <span class="tag tag-blue">ReportLab</span>
+                  <span class="tag tag-cyan">SMTP</span>
+                  <span class="tag tag-green">SQLite</span>
+                </div>
+              </div>
+            </div>
+            <span class="status-badge" style="background:rgba(139,92,246,0.12);color:#a78bfa;border:1px solid rgba(139,92,246,0.25);">Concepto</span>
+          </div>
+          <p class="card-desc">Genera y envía facturas PDF automáticamente cuando se registra un nuevo pago o pedido. Lee los datos del cliente desde una base de datos, aplica la plantilla con numeración correlativa, IVA y condiciones, y envía el PDF por SMTP. Registra cada factura en SQLite para seguimiento y exportación contable.</p>
+          <div class="workflow">
+            <div class="wf-node wf-trigger">
+              <div class="wf-icon">💳</div>
+              <div class="wf-label">Nuevo Pago</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-storage">
+              <div class="wf-icon">🗄️</div>
+              <div class="wf-label">Cliente DB</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">🔢</div>
+              <div class="wf-label">Numerador</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-process">
+              <div class="wf-icon">🧾</div>
+              <div class="wf-label">PDF Builder</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-api">
+              <div class="wf-icon">✉️</div>
+              <div class="wf-label">SMTP Sender</div>
+            </div>
+            <div class="wf-arrow"></div>
+            <div class="wf-node wf-storage">
+              <div class="wf-icon">📑</div>
+              <div class="wf-label">Registro Facturas</div>
+            </div>
+          </div>
+          <div class="use-cases">
+            <div class="use-cases-title">Casos de uso</div>
+            <ul>
+              <li>Freelancers que facturan recurrentemente sin tocar un documento</li>
+              <li>SaaS y tiendas online que necesitan facturas automáticas por compra</li>
+              <li>Negocios que quieren eliminar el trabajo manual de facturación</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <span class="status-badge" style="background:rgba(139,92,246,0.12);color:#a78bfa;border:1px solid rgba(139,92,246,0.25);">Concepto</span>
+          </div>
+        </div>
+
 
       </div>
     </div>
